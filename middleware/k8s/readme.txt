@@ -1,0 +1,1 @@
+通过https://github.com/kubernetes/client-go 来操作k8s集群

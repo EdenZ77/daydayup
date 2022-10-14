@@ -1,0 +1,25 @@
+version: v1
+managed:
+  enabled: true
+  go_package_prefix:
+    # proto文件中不使用option定义包名称，因为proto生成代码可以放在不同项目中使用，因此在buf.gen.yaml中进行定义
+    default: hello/apigen
+    except:
+      - buf.build/googleapis/googleapis
+plugins:
+  - name: go
+    out: gen/go
+    opt:
+      - paths=source_relative
+  - name: go-grpc
+    out: gen/go
+    opt:
+      - paths=source_relative
+      - require_unimplemented_servers=false
+  - name: grpc-gateway
+    out: gen/go
+    opt:
+      - paths=source_relative
+      - generate_unbound_methods=true
+  - name: openapiv2
+    out: gen/openapiv2

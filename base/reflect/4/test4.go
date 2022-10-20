@@ -13,7 +13,7 @@ func reflectSetValue1(x interface{}) {
 	}
 }
 
-func reflectSetValue2(x interface{}) {
+func reflectSetValue2(x any) {
 	v := reflect.ValueOf(x)
 	if v.Elem().Kind() == reflect.Int64 {
 		// 反射中使用 Elem()方法获取指针对应的值

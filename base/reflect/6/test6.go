@@ -35,13 +35,13 @@ func (s student) Sleep() string {
 	return msg
 }
 
-func printMethod(x interface{}) {
+func printMethod(x any) {
 	t := reflect.TypeOf(x)
 	v := reflect.ValueOf(x)
 
-	fmt.Println(t.NumMethod())
-	for i := 0; i < v.NumMethod(); i++ {
-		methodType := v.Method(i).Type()
+	fmt.Println(t.NumMethod()) // 2
+	for i := 0; i < t.NumMethod(); i++ {
+		methodType := t.Method(i).Type
 		fmt.Printf("method name:%s\n", t.Method(i).Name)
 		fmt.Printf("method:%s\n", methodType)
 		// 通过反射调用方法传递的参数必须是 []reflect.Value 类型
@@ -54,7 +54,7 @@ func main() {
 
 	stu1 := student{"小王子", 90}
 	t := reflect.TypeOf(stu1)
-	fmt.Println(t.Name(), t.Kind())
+	fmt.Println(t.Name(), t.Kind()) // student struct
 	// 通过for循环遍历结构体的所有字段信息
 	for i := 0; i < t.NumField(); i++ {
 		field := t.Field(i)

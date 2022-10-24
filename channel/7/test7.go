@@ -25,12 +25,13 @@ func main() {
 				// 如果周期性定时被消费10次后就停止该定时器
 				ticker.Stop()
 				// 调用runtime.goExit()将立即终止当前goroutine执行
-				// runtime.Goexit函数在终止调用它的Goroutine的运行之前会先执行该Groution中还没有执行的defer语句
+				// runtime.Goexit函数在终止调用它的Goroutine之前会先执行该Groution中还没有执行的defer语句
 				runtime.Goexit()
 			}
 		}
 	}()
 
-	time.Sleep(time.Second * 100)
+	time.Sleep(time.Second * 35)
+	fmt.Println("main over")
 
 }

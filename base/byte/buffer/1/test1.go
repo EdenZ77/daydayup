@@ -7,10 +7,11 @@ import (
 )
 
 func main() {
+	testInit()
 	//testWrite()
 	//testWriteString()
 	//testRead()
-	testReadFrom()
+	//testReadFrom()
 }
 
 func testInit() {

@@ -24,6 +24,7 @@ func (*T2) PT2M2() { println("PT2's M2") }
 type T struct {
 	T1
 	*T2
+	//*T1
 }
 
 func main() {

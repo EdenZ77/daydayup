@@ -32,6 +32,8 @@ func main() {
 	t.M4()
 	newP.M3()
 	newP.M4()
+	newP.M1()
+	newP.M2()
 }
 
 func dumpMethodSet(i interface{}) {

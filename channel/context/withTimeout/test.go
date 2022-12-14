@@ -18,7 +18,7 @@ LOOP:
 		time.Sleep(time.Millisecond * 10) // 假设正常连接数据库耗时10毫秒
 		select {
 		case <-ctx.Done(): // 50毫秒后自动调用
-			fmt.Println(ctx.Err())
+			fmt.Println(ctx.Err()) // context deadline exceeded
 			break LOOP
 		default:
 		}

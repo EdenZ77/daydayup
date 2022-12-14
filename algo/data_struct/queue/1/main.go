@@ -36,14 +36,17 @@ func (b *BlockingQueue[T]) SetRejectHandler(handler RejectHandler) {
 
 func (b *BlockingQueue[T]) Push(value T) {
 	ok := true
+	// 是否有拒绝处理程序
 	if b.handler != nil {
 		select {
 		case b.q <- value:
 			return
+		// 当chan了满了，不会阻塞，而是调用处理程序，根据处理结果看是否再次入栈
 		default:
 			ok = b.handler(b.ctx)
 		}
 	}
+	// 当chan了满了就会阻塞
 	if ok {
 		b.q <- value
 	}
@@ -53,6 +56,7 @@ func (b *BlockingQueue[T]) TryPush(value T, timeout time.Duration) bool {
 	ctx, cancel := context.WithTimeout(b.ctx, timeout)
 	defer cancel()
 	select {
+	// 如果chan满了，则会等待timeout时长，如果还是无法push，则返回
 	case b.q <- value:
 		return true
 	case <-ctx.Done():
@@ -61,6 +65,7 @@ func (b *BlockingQueue[T]) TryPush(value T, timeout time.Duration) bool {
 }
 
 func (b *BlockingQueue[T]) Poll() T {
+	// 如果chan没有数据了，则会阻塞
 	ret := <-b.q
 	return ret
 }
@@ -69,6 +74,7 @@ func (b *BlockingQueue[T]) TryPoll(timeout time.Duration) (ret T, ok bool) {
 	ctx, cancel := context.WithTimeout(b.ctx, timeout)
 	defer cancel()
 	select {
+	// 如果chan有数据，则直接返回，没有数据的话，select会阻塞timout时长，还是没有数据，则会返回
 	case ret = <-b.q:
 		return ret, true
 	case <-ctx.Done():

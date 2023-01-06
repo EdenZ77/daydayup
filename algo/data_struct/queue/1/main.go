@@ -6,6 +6,11 @@ import (
 	"time"
 )
 
+/*
+https://blog.csdn.net/a568283992/article/details/123438301
+泛型+管道 实现一个阻塞队列
+*/
+
 type RejectHandler func(ctx context.Context) bool
 
 type Queue[T any] interface {

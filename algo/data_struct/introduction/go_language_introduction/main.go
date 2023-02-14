@@ -17,7 +17,7 @@ func main() {
 
 	//testMath()
 
-	//testDelete()
+	testDelete()
 
 	//testCastType()
 
@@ -39,12 +39,19 @@ func testDelete() {
 	intA = append(intA, 4, 3, 2, 5, 7, 6, 8)
 	fmt.Println(len(intA)) // 7
 	fmt.Println(cap(intA)) // 10
+
+	copy(intA[2:], intA[3:])
+	intA = intA[:len(intA)-1]
+	fmt.Println("测试删除a[2]")
+	fmt.Println(intA)
+
 	//   intA[2:]就是切片[2,5,7,6,8],intA[4:]就是切片[7,6,8],copy过程就是将intA[4:]覆盖了intA[2:]前三位，后面的6,8没有动
-	copy(intA[2:], intA[4:])
-	fmt.Println(intA) // [4 3 7 6 8 6 8]
-	intA = intA[:len(intA)-2]
+	//copy(intA[2:], intA[4:])
+	//fmt.Println(intA) // [4 3 7 6 8 6 8]
+	//intA = intA[:len(intA)-2]
 	// 相当于删除了2，5。所以这种方式可以用来进行删除a[i]
-	fmt.Println(intA) // [4 3 7 6 8]
+	//fmt.Println(intA) // [4 3 7 6 8]
+
 }
 
 func testMath() {

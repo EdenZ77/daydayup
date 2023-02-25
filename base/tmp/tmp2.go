@@ -3,9 +3,6 @@ package main
 import (
 	"bytes"
 	"io"
-	"log"
-	"os"
-	"strings"
 )
 
 func CapReader(r io.Reader) io.Reader {
@@ -29,10 +26,10 @@ func (r *capitalizedReader) Read(p []byte) (int, error) {
 	return n, err
 }
 
-func main() {
-	r := strings.NewReader("hello, gopher!\n")
-	r1 := CapReader(io.LimitReader(r, 4))
-	if _, err := io.Copy(os.Stdout, r1); err != nil {
-		log.Fatal(err)
-	}
-}
+//func main() {
+//	r := strings.NewReader("hello, gopher!\n")
+//	r1 := CapReader(io.LimitReader(r, 4))
+//	if _, err := io.Copy(os.Stdout, r1); err != nil {
+//		log.Fatal(err)
+//	}
+//}

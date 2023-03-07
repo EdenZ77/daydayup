@@ -23,20 +23,44 @@ func main() {
 
 	//s := "http://dropbox.com/s/sh8sdkotfpbrrmg/fattura n. 177 del  26-07-2016 .pdf.zip?dl=1 [3585]"
 	//s := "http://dropbox.com/s/sh8sdkotfpbrrmg/fattura n. 177 del  26-07-2016 .pdf.zi [3585]"
-	s := "http://dropbox.com?s/sh8sdkotfpbrrmg/fattura n. 177 del  26-07-2016 .pdf.zi [3585]"
+	//s := "http://dropbox.com?s/sh8sdkotfpbrrmg/fattura n. 177 del  26-07-2016 .pdf.zi [3585]"
 	//s := "http://dropbox.com?s/sh8sdkotfpbrrmg/fattura n. 177 del  26-07-2016 .pdf.zip?dl=1 [3585]"
 	//s := "http://dropbox.com [3585]"
-	strArr := strings.Fields(strings.TrimSpace(s))
-	strArr = strArr[:len(strArr)-1]
-	url := strings.Join(strArr, "")
-	fmt.Println(url)
+	//strArr := strings.Fields(strings.TrimSpace(s))
+	//strArr = strArr[:len(strArr)-1]
+	//url := strings.Join(strArr, "")
+	//fmt.Println(url)
+	//index := strings.Index(url, "://")
+	//noProto := url
+	//if index != -1 {
+	//	noProto = noProto[index+3:]
+	//}
+	//fmt.Println(noProto)
+	//// =======
+	//indexXie := strings.Index(noProto, "/")
+	//indexWen := strings.Index(noProto, "?")
+	//noProtoAndPath := noProto
+	//if indexXie == -1 && indexWen != -1 {
+	//	noProtoAndPath = noProtoAndPath[:indexWen]
+	//} else if indexXie != -1 && indexWen == -1 {
+	//	noProtoAndPath = noProtoAndPath[:indexXie]
+	//} else if indexXie != -1 && indexWen != -1 {
+	//	if indexXie > indexWen {
+	//		noProtoAndPath = noProtoAndPath[:indexWen]
+	//	} else {
+	//		noProtoAndPath = noProtoAndPath[:indexXie]
+	//	}
+	//}
+	//fmt.Println(noProtoAndPath)
+
+	url := "http://xxx.com.123.456.123"
+
 	index := strings.Index(url, "://")
 	noProto := url
 	if index != -1 {
 		noProto = noProto[index+3:]
 	}
 	fmt.Println(noProto)
-	// =======
 	indexXie := strings.Index(noProto, "/")
 	indexWen := strings.Index(noProto, "?")
 	noProtoAndPath := noProto
@@ -54,3 +78,13 @@ func main() {
 	fmt.Println(noProtoAndPath)
 
 }
+
+//const (
+//	ErrParams = 10400
+//	ErrServer = 10500
+//)
+//
+//var msg = map[int]string{
+//	ErrParams: "参数错误",
+//	ErrServer: "系统内部错误",
+//}

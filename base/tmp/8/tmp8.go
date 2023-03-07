@@ -39,6 +39,7 @@ func main() {
 	strArr1 = append(strArr1, "1212")
 	time.Sleep(1000 * time.Millisecond)
 
+	//slice := new([]int)
 	// case 2 打印：i = 1
 	// 所以我们在使用go func的时候最好把可能改变的值通过值传递的方式传入到闭包之中,避免在协程运行的时候参数值改变导致结果不可预期
 

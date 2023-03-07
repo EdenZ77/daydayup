@@ -30,7 +30,7 @@ func main() {
 	//var a T
 	fmt.Println(unsafe.Sizeof(Args{})) // 占用内存字节大小 16
 	fmt.Println(unsafe.Sizeof(Flag{})) // 占用内存字节大小 8
-	//fmt.Println(unsafe.Sizeof(name)) 后期研究关于切片等类型的内存字节大小问题，先目前先简单研究结构体的内存大小
+	//fmt.Println(unsafe.Sizeof(name))   // 后期研究关于切片等类型的内存字节大小问题，先目前先简单研究结构体的内存大小
 
 	// 对于 struct 结构体类型的变量 x，计算 x 每一个字段 f 的unsafe.Alignof(x.f), unsafe.Alignof(x) 等于其中的最大值。
 	fmt.Println(unsafe.Alignof(Args{}.num1)) // 8

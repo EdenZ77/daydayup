@@ -53,14 +53,14 @@ func main() {
 	//}
 	//fmt.Println(noProtoAndPath)
 
-	url := "http://xxx.com.123.456.123"
+	url := "https://www.outcastcrossfit.com"
 
 	index := strings.Index(url, "://")
 	noProto := url
 	if index != -1 {
 		noProto = noProto[index+3:]
 	}
-	fmt.Println(noProto)
+	fmt.Println("noProto: ", noProto)
 	indexXie := strings.Index(noProto, "/")
 	indexWen := strings.Index(noProto, "?")
 	noProtoAndPath := noProto
@@ -75,7 +75,14 @@ func main() {
 			noProtoAndPath = noProtoAndPath[:indexXie]
 		}
 	}
-	fmt.Println(noProtoAndPath)
+	fmt.Println("noProtoAndPath: ", noProtoAndPath)
+
+	//cats := strings.Split("[2306,2562,2563]", ",")
+	//cats := strings.Split("[2306]", ",")
+	//fmt.Println(len(cats))
+	//for _, cat := range cats {
+	//	fmt.Println(cat)
+	//}
 
 }
 

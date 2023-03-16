@@ -1,8 +1,8 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"strings"
 )
 
 type mystring struct {
@@ -53,29 +53,29 @@ func main() {
 	//}
 	//fmt.Println(noProtoAndPath)
 
-	url := "https://www.outcastcrossfit.com"
-
-	index := strings.Index(url, "://")
-	noProto := url
-	if index != -1 {
-		noProto = noProto[index+3:]
-	}
-	fmt.Println("noProto: ", noProto)
-	indexXie := strings.Index(noProto, "/")
-	indexWen := strings.Index(noProto, "?")
-	noProtoAndPath := noProto
-	if indexXie == -1 && indexWen != -1 {
-		noProtoAndPath = noProtoAndPath[:indexWen]
-	} else if indexXie != -1 && indexWen == -1 {
-		noProtoAndPath = noProtoAndPath[:indexXie]
-	} else if indexXie != -1 && indexWen != -1 {
-		if indexXie > indexWen {
-			noProtoAndPath = noProtoAndPath[:indexWen]
-		} else {
-			noProtoAndPath = noProtoAndPath[:indexXie]
-		}
-	}
-	fmt.Println("noProtoAndPath: ", noProtoAndPath)
+	//url := "https://www.outcastcrossfit.com"
+	//
+	//index := strings.Index(url, "://")
+	//noProto := url
+	//if index != -1 {
+	//	noProto = noProto[index+3:]
+	//}
+	//fmt.Println("noProto: ", noProto)
+	//indexXie := strings.Index(noProto, "/")
+	//indexWen := strings.Index(noProto, "?")
+	//noProtoAndPath := noProto
+	//if indexXie == -1 && indexWen != -1 {
+	//	noProtoAndPath = noProtoAndPath[:indexWen]
+	//} else if indexXie != -1 && indexWen == -1 {
+	//	noProtoAndPath = noProtoAndPath[:indexXie]
+	//} else if indexXie != -1 && indexWen != -1 {
+	//	if indexXie > indexWen {
+	//		noProtoAndPath = noProtoAndPath[:indexWen]
+	//	} else {
+	//		noProtoAndPath = noProtoAndPath[:indexXie]
+	//	}
+	//}
+	//fmt.Println("noProtoAndPath: ", noProtoAndPath)
 
 	//cats := strings.Split("[2306,2562,2563]", ",")
 	//cats := strings.Split("[2306]", ",")
@@ -83,7 +83,9 @@ func main() {
 	//for _, cat := range cats {
 	//	fmt.Println(cat)
 	//}
-
+	var catArr []int32
+	_ = json.Unmarshal(([]byte)("[]"), &catArr)
+	fmt.Println(catArr)
 }
 
 //const (

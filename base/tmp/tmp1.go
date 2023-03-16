@@ -47,6 +47,6 @@ func authHandler(h http.Handler) http.Handler {
 	})
 }
 
-func main() {
-	http.ListenAndServe(":8080", logHandler2(logHandler1(authHandler(http.HandlerFunc(greetings)))))
-}
+//func main() {
+//	http.ListenAndServe(":8080", logHandler2(logHandler1(authHandler(http.HandlerFunc(greetings)))))
+//}

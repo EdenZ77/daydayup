@@ -31,6 +31,7 @@ ioutil.ReadFile 读取文件只需要传入一个文件名做为 参数，读取
 */
 func ioutilReadFile_case1() {
 	fileName := "D:\\workspace\\go_project\\study\\daydayup\\base\\file\\haicoder.txt"
+	// 这个ioutil.ReadFile在go1.16的时候废弃了，因为这个函数仅仅是调用了一下os.ReadFile，所以我们直接使用os.ReadFile即可
 	fileData, err := ioutil.ReadFile(fileName)
 	//fileData, err := os.ReadFile(fileName)
 	if err == nil {
@@ -149,6 +150,7 @@ func ioutilReadAll_case4() {
 		return
 	}
 	defer file.Close()
+	// 这个ioutil.ReadAll在go1.16的时候废弃了，因为这个函数仅仅是调用了一下os.ReadAll，所以我们直接使用os.ReadAll即可
 	fileContent, err := ioutil.ReadAll(file)
 	//fileContent, err := io.ReadAll(file)
 	if err == nil {

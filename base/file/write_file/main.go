@@ -97,6 +97,7 @@ func ioutilWriteFile_case2() {
 		content  = "Hello HaiCoder"
 		err      error
 	)
+	// 这个ioutil.WriteFile在go1.16的时候废弃了，因为这个函数仅仅是调用了一下os.WriteFile，所以我们直接使用os.WriteFile即可
 	if err = ioutil.WriteFile(fileName, []byte(content), 0666); err != nil {
 		fmt.Println("Writefile Error =", err)
 		return

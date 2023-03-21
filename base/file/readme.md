@@ -241,5 +241,11 @@ func (b *Writer) Reset(w io.Writer)
 ```
 
 ### ReadSlice、ReadBytes、ReadString 和 ReadLine 方法
+参考资料：https://books.studygolang.com/The-Golang-Standard-Library-by-Example/chapter01/01.4.html
+
 之所以将这几个方法放在一起，是因为他们有着类似的行为。事实上，后三个方法最终都是调用ReadSlice来实现的。所以，我们先来看看ReadSlice方法。(感觉这一段直接看源码较好)
+ReadSlice方法签名如下：
+```go
+func (b *Reader) ReadSlice(delim byte) (line []byte, err error)
+```
 

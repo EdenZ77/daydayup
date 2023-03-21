@@ -49,8 +49,10 @@ func testDelete() {
 	//copy(intA[2:], intA[4:])
 	//fmt.Println(intA) // [4 3 7 6 8 6 8]
 	//intA = intA[:len(intA)-2]
-	// 相当于删除了2，5。所以这种方式可以用来进行删除a[i]
-	//fmt.Println(intA) // [4 3 7 6 8]
+	// 相当于删除了6、8。所以这种方式可以用来进行删除a[i]
+	//fmt.Println(intA)      // [4 3 7 6 8]
+	//fmt.Println(len(intA)) // 5
+	//fmt.Println(cap(intA)) // 10
 
 }
 

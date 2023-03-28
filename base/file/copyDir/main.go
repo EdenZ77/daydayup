@@ -10,26 +10,14 @@ import (
 )
 
 func main() {
-	//err := CopyDir("D:\\workspace\\go_project\\study\\daydayup\\base\\file\\copyDir\\srcTestCopyDir1", "D:\\workspace\\go_project\\study\\daydayup\\base\\file\\copyDir\\dstDir")
-	//if err != nil {
-	//	fmt.Println(err)
-	//	return
-	//}
-	//split := strings.Split("sdfasfa    alsdfk  asdfa", " ")
-	//strArr := strings.Fields(strings.TrimSpace("sdfasfa    alsdfk,adsf  asdfa,111"))
-	//fmt.Println(len(strArr))
-
-	//sourceCats := make([]string, 0, 8)
-	//err := json.Unmarshal([]byte("[chinese]"), &sourceCats)
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
-	ss := "callhome,dialer-repository"
-	split := strings.Split(ss, ",")
-
-	fmt.Println(split)
+	err := CopyDir("D:\\workspace\\go_project\\study\\daydayup\\base\\file\\copyDir\\srcTestCopyDir1", "D:\\workspace\\go_project\\study\\daydayup\\base\\file\\copyDir\\dstDir")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
 
+// CopyDir 两个参数都需要是目录, 且都必须存在
 func CopyDir(srcPath, desPath string) error {
 	//检查目录是否正确
 	if srcInfo, err := os.Stat(srcPath); err != nil {
@@ -53,6 +41,7 @@ func CopyDir(srcPath, desPath string) error {
 	}
 
 	err := filepath.Walk(srcPath, func(path string, f os.FileInfo, err error) error {
+		fmt.Println(path)
 		if f == nil {
 			return err
 		}

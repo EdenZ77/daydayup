@@ -107,3 +107,8 @@ func FileIsExisted(filename string) bool {
 	}
 	return existed
 }
+
+// 将路径统一处理，兼容window和Linux
+func toLinux(basePath string) string {
+	return strings.ReplaceAll(basePath, "\\", "/")
+}

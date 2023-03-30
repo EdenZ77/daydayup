@@ -7,27 +7,27 @@ import (
 
 // 闭包既可以通过函数参数使用外部函数变量，也可以直接使用，两者有什么区别呢？
 func main() {
-	// case 1 打印：i = 2 说明闭包内捕获外部函数变量是取的地址,而不是调用闭包时刻的参数值
-	//i := "123"
+	// case 1 打印：i = 2 说明闭包内捕获外部函数变量是取的地址,而不是调用闭包时刻的参数值*******************非常重要的结论
+	//i := 1
 	//
 	//go func() {
 	//	time.Sleep(100 * time.Millisecond)
 	//	fmt.Println("i =", i)
 	//}()
 	//
-	//i = "234"
+	//i = 2
 	//time.Sleep(1000 * time.Millisecond)
 
 	// case 1.1
-	strArr := []string{"11", "22", "33"}
-	// 函数参数是值传递
-	go func(ss []string) {
-		time.Sleep(100 * time.Millisecond)
-		fmt.Println("arr =", ss) // arr = [11 22 33]
-	}(strArr)
+	//strArr := []string{"11", "22", "33"}
+	//// 函数参数是值传递。对于函数参数是切片，必须深刻理解，切片就是一个结构体
+	//go func(ss []string) {
+	//	time.Sleep(100 * time.Millisecond)
+	//	fmt.Println("arr =", ss) // arr = [xx 22 33]
+	//}(strArr)
 	//strArr[0] = "xx"
-	strArr = append(strArr, "1212")
-	time.Sleep(1000 * time.Millisecond)
+	//strArr = append(strArr, "1212")
+	//time.Sleep(1000 * time.Millisecond)
 
 	// case 1.2
 	strArr1 := []string{"11", "22", "33"}

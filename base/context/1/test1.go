@@ -39,5 +39,16 @@ func ProcessEnter(ctx context.Context) {
 }
 
 func main() {
-	ProcessEnter(NewContextWithTraceID())
+
+	go func() {
+		c := NewContextWithTraceID()
+		go func() {
+			time.Sleep(3 * time.Second)
+			ProcessEnter(c)
+		}()
+		fmt.Println("1 goroutine over")
+	}()
+
+	time.Sleep(10 * time.Second)
+	fmt.Println("main over")
 }

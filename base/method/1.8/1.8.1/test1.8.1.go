@@ -24,26 +24,37 @@ func (*T2) PT2M2() { println("PT2's M2") }
 type T struct {
 	T1
 	*T2
-	//*T1
 }
 
+// 不使用嵌套
+//type T struct {
+//	t1 T1
+//	t2 *T2
+//}
+
 func main() {
-	t := T{
-		T1: T1{},
-		T2: &T2{},
-	}
+	//t := T{
+	//	T1: T1{},
+	//	T2: &T2{},
+	//}
 
-	dumpMethodSet(t)
-	dumpMethodSet(&t)
+	// 当不使用嵌套类型的时候
+	//t := T{
+	//	t1: T1{},
+	//	t2: &T2{},
+	//}
+	// 当不使用嵌套类型的时候, 方法集合为空
+	//dumpMethodSet(t)
+	//dumpMethodSet(&t)
 
-	t.T1M1()     // T1's M1
-	t.PT1M2()    // PT1's M2
-	t.T2M1()     // T2's M1
-	t.PT2M2()    // PT2's M2
-	(&t).T1M1()  // T1's M1
-	(&t).PT1M2() // PT1's M2
-	(&t).T2M1()  // T2's M1
-	(&t).PT2M2() // PT2's M2
+	//t.T1M1()     // T1's M1
+	//t.PT1M2()    // PT1's M2
+	//t.T2M1()     // T2's M1
+	//t.PT2M2()    // PT2's M2
+	//(&t).T1M1()  // T1's M1
+	//(&t).PT1M2() // PT1's M2
+	//(&t).T2M1()  // T2's M1
+	//(&t).PT2M2() // PT2's M2
 
 }
 

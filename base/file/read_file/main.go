@@ -8,10 +8,8 @@ import (
 	"os"
 )
 
-/*
- */
 func main() {
-	ioutilReadAll_case4()
+	fileRead_case2()
 }
 
 /*
@@ -30,8 +28,11 @@ ioutil.ReadFile 读取文件只需要传入一个文件名做为 参数，读取
 使用 ReadFile 读取文件，不需要手动 打开与关闭文件，打开与关闭文件的动作，系统自动帮我们完成。同时，使用 ReadFile 读取文件时，只适合读取小文件，不适合读取大文件。
 */
 func ioutilReadFile_case1() {
-	fileName := "D:\\workspace\\go_project\\study\\daydayup\\base\\file\\haicoder.txt"
+	//fileName := "E:\\workspace\\go\\daydayup\\base\\file\\haicoder.txt"
+	// 这两种路径方式都可以
+	fileName := "E:/workspace/go/daydayup/base/file/haicoder.txt"
 	// 这个ioutil.ReadFile在go1.16的时候废弃了，因为这个函数仅仅是调用了一下os.ReadFile，所以我们直接使用os.ReadFile即可
+	// 因为ReadFile读取整个文件，所以它不会将Read中的EOF视为要报告的错误。
 	fileData, err := ioutil.ReadFile(fileName)
 	//fileData, err := os.ReadFile(fileName)
 	if err == nil {
@@ -57,7 +58,7 @@ err	如果读取失败，返回错误信息，否则，返回 nil
 文件读取结束的标志是返回的 n 等于 0，因此，如果我们需要读取整个文件内容，那么我们需要使用 for 循环 不停的读取文件，直到 n 等于 0。
 */
 func fileRead_case2() {
-	fileName := "D:\\workspace\\go_project\\study\\daydayup\\base\\file\\haicoder.txt"
+	fileName := "E:/workspace/go/daydayup/base/file/haicoder.txt"
 	file, err := os.Open(fileName)
 	if err != nil {
 		fmt.Println("Read file err, err =", err)
@@ -69,12 +70,11 @@ func fileRead_case2() {
 	buf := make([]byte, 1024)
 	for {
 		n, err := file.Read(buf)
-		// 读取到文件最后，返回n=0,io.EOF
 		if err != nil && err != io.EOF {
 			fmt.Println("read buf fail", err)
 			return
 		}
-		//说明读取结束
+		// 读取到文件最后，返回n=0,io.EOF
 		if n == 0 {
 			break
 		}
@@ -102,7 +102,7 @@ err	读取失败，则返回错误信息。
 最后，我们使用 NewReader 返回的 reader 对象调用 Read 来读取文件。文件读取结束的标志是返回的 n 等于 0，因此，如果我们需要读取整个文件内容，那么我们需要使用 for 循环 不停的读取文件，直到 n 等于 0。
 */
 func bufioNewRead_case3() {
-	fileName := "D:\\workspace\\go_project\\study\\daydayup\\base\\file\\haicoder.txt"
+	fileName := "E:/workspace/go/daydayup/base/file/haicoder.txt"
 	file, err := os.Open(fileName)
 	if err != nil {
 		fmt.Println("Read file err, err =", err)

@@ -84,6 +84,11 @@ func (r *router) findRoute(method string, path string) (*node, bool) {
 	return root, true
 }
 
+// node 代表路由树的节点
+// 路由树的匹配顺序是：
+// 1. 静态完全匹配
+// 2. 通配符匹配
+// 这是不回溯匹配
 type node struct {
 	path string
 	// children 子节点
@@ -91,6 +96,9 @@ type node struct {
 	children map[string]*node
 	// handler 命中路由之后执行的逻辑
 	handler HandleFunc
+
+	// 通配符 * 表达的节点，任意匹配
+	starChild *node
 }
 
 func (n *node) childOf(path string) (*node, bool) {

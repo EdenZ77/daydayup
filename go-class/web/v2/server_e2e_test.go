@@ -1,10 +1,10 @@
-//go:build v2
-
 package web
 
 import (
 	"testing"
 )
+
+// 这里放着端到端测试的代码
 
 // 这里放着端到端测试的代码
 

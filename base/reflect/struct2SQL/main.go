@@ -5,6 +5,11 @@ import (
 	"reflect"
 )
 
+/*
+现在让我们理解一下 ”在运行时知道变量的类型的必要“。假设我们要编写一个简单的函数，它将一个结构体作为参数，并使用这个参数创建一个SQL插入语句。
+
+*/
+
 type order struct {
 	ordId      int
 	customerId int
@@ -24,6 +29,8 @@ func createQuery(q interface{}) {
 		query := fmt.Sprintf("insert into %s values(", t)
 		v := reflect.ValueOf(q)
 		for i := 0; i < v.NumField(); i++ {
+			// 注意reflect.Value 也实现了NumField,Kind这些方法
+			// 这里的v.Field(i).Kind()等价于t.Field(i).Type.Kind()
 			switch v.Field(i).Kind() {
 			case reflect.Int:
 				if i == 0 {

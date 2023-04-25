@@ -6,7 +6,8 @@ import (
 	"crypto/x509"
 	"flag"
 	"fmt"
-	"hello/rpc/grpc/hello/authentication"
+	"hello/network/rpc/grpc/hello/authentication"
+	"hello/network/rpc/grpc/hello/pb"
 	"io/ioutil"
 	"log"
 	"time"
@@ -17,8 +18,6 @@ import (
 	"google.golang.org/grpc/status"
 
 	"google.golang.org/grpc/metadata"
-
-	pb "hello/rpc/grpc/hello/pb"
 
 	"google.golang.org/grpc"
 )
@@ -83,7 +82,7 @@ func main() {
 		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
-	c := pb.NewGreeterClient(conn)
+	c := xx.NewGreeterClient(conn)
 
 	// 创建带有metadata的context，带有超时控制
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
@@ -93,7 +92,7 @@ func main() {
 
 	var header, trailer metadata.MD // 声明存储header和trailer的变量
 
-	r, err := c.SayHello(ctxWithMD, &pb.HelloRequest{Name: *name}, grpc.Header(&header), grpc.Trailer(&trailer))
+	r, err := c.SayHello(ctxWithMD, &xx.HelloRequest{Name: *name}, grpc.Header(&header), grpc.Trailer(&trailer))
 	// 当服务端返回错误时，尝试从错误中获取detail信息
 	if err != nil {
 		s := status.Convert(err)        // 将err转为status

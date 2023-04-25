@@ -9,8 +9,8 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/status"
-	"hello/rpc/grpc/hello/authentication"
-	pb "hello/rpc/grpc/hello/pb"
+	"hello/network/rpc/grpc/hello/authentication"
+	"hello/network/rpc/grpc/hello/pb"
 	"io/ioutil"
 	"log"
 	"net"
@@ -24,13 +24,13 @@ import (
 // hello server
 
 type server struct {
-	pb.UnimplementedGreeterServer
+	xx.UnimplementedGreeterServer
 
 	mu    sync.Mutex     // count的并发锁
 	count map[string]int // 记录每个name的请求次数
 }
 
-func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloResponse, error) {
+func (s *server) SayHello(ctx context.Context, in *xx.HelloRequest) (*xx.HelloResponse, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -85,7 +85,7 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 	}
 	// 正常返回响应
 	reply := "hello " + in.GetName()
-	return &pb.HelloResponse{Reply: reply}, nil
+	return &xx.HelloResponse{Reply: reply}, nil
 }
 
 func main() {
@@ -133,7 +133,7 @@ func main() {
 	//s := grpc.NewServer()
 	s := grpc.NewServer(grpc.ChainUnaryInterceptor(LoggingInterceptor1, LoggingInterceptor2, myEnsureValidToken), grpc.Creds(creds))
 	// 注册服务，注意初始化count
-	pb.RegisterGreeterServer(s, &server{count: make(map[string]int)})
+	xx.RegisterGreeterServer(s, &server{count: make(map[string]int)})
 	// 启动服务
 	err = s.Serve(lis)
 	if err != nil {

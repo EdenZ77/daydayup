@@ -12,7 +12,6 @@ require (
 	github.com/json-iterator/go v1.1.12
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/olivere/elastic v6.2.37+incompatible
-	github.com/panjf2000/ants/v2 v2.7.2
 	github.com/petermattis/goid v0.0.0-20220712135657-ac599d9cba15
 	github.com/pkg/errors v0.9.1
 	github.com/robfig/cron/v3 v3.0.0

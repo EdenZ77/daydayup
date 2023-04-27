@@ -17,7 +17,8 @@ func main() {
 	*i = int32(98)
 	//var j *int64 = (*int64)(unsafe.Pointer(uintptr(unsafe.Pointer(v)) + uintptr(unsafe.Sizeof(int32(0))))) // 应考虑内存对齐
 	//var j *int64 = (*int64)(unsafe.Pointer(uintptr(unsafe.Pointer(v)) + uintptr(unsafe.Sizeof(int64(0))))) // 正确，应该计算j偏移量，但是j不可见，无法引用
-	var j *int64 = (*int64)(unsafe.Pointer(uintptr(unsafe.Pointer(v)) + uintptr(8))) // 正确
+	//var j *int64 = (*int64)(unsafe.Pointer(uintptr(unsafe.Pointer(v)) + uintptr(8))) // 正确
+	var j *int64 = (*int64)(unsafe.Add(unsafe.Pointer(v), 8)) // 正确, 调用了1.17新增加的unsafe.Add方法
 	*j = int64(763)
 	v.PutI()
 	v.PutJ()

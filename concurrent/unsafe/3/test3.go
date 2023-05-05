@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"hello/concurrent/unsafe/3/p"
 	"unsafe"
 )
@@ -22,9 +23,32 @@ func main() {
 	*j = int64(763)
 	v.PutI()
 	v.PutJ()
+	fmt.Println("===============")
+	//testSlice()
+	slice2arrayWithHack()
 }
 
 //var i *int32 = (*int32)(unsafe.Pointer(v))
 // 将指针v转成通用指针，再转成int32指针。这里就看到了unsafe.Pointer的作用了，您不能直接将v转成int32类型的指针，那样将会panic。
 // 刚才说了v的地址其实就是它的第一个成员的地址，所以这个i就很显然指向了v的成员i，
 // 通过给i赋值就相当于给v.i赋值了，但是别忘了i只是个指针，要赋值得解引用。
+
+func testSlice() {
+	a := [3]int{2, 3, 4}
+	//a := []int{3, 4, 5}
+	slice := unsafe.Slice(&a[0], 3)
+	fmt.Println(slice)
+	fmt.Println(len(slice))
+	fmt.Println(cap(slice))
+}
+
+func slice2arrayWithHack() {
+	var b = []int{11, 12, 13}
+	var a = *(*[3]int)(unsafe.Pointer(&b[0]))
+	a[1] += 10
+	fmt.Printf("%v\n", b) // [11 12 13]
+	fmt.Println(a)
+	fmt.Println(len(a))
+	fmt.Println(cap(a))
+
+}

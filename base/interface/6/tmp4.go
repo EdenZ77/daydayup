@@ -1,17 +1,23 @@
 package main
 
-//func main() {
-//	//err1 := errors.New("EOF")
-//	//err2 := errors.New("EOF")
-//	//println(err1)
-//	//println(err2)
-//	//println(io.EOF)
-//	//fmt.Println(err1 == io.EOF)
-//	//fmt.Println(err1 == err2)
-//	//fmt.Println(io.EOF == io.EOF)
-//	//printNonEmptyInterface()
-//	printNonEmptyInterface1()
-//}
+import (
+	"errors"
+	"fmt"
+	"io"
+)
+
+func main() {
+	err1 := errors.New("EOF")
+	err2 := errors.New("EOF")
+	println(err1)
+	println(err2)
+	println(io.EOF)
+	fmt.Println(err1 == io.EOF)
+	fmt.Println(err1 == err2)
+	fmt.Println(io.EOF == io.EOF)
+	//printNonEmptyInterface()
+	//printNonEmptyInterface1()
+}
 
 type T struct {
 	name string

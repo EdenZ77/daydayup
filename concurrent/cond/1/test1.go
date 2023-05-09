@@ -40,5 +40,5 @@ func main() {
 	fmt.Println("main 解锁...")
 	cond.L.Unlock()
 
-	time.Sleep(3 * time.Second)
+	time.Sleep(10 * time.Second)
 }

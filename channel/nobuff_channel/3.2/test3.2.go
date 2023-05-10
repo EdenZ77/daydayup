@@ -47,6 +47,7 @@ func main() {
 	fmt.Println("the group of workers start to work...")
 	// 一组业务被阻塞在无缓冲channel接受数据的地方，当这里close这个channel的话，那批业务的channel将可以执行接受操作，从而实现1：n的信号通知效果
 	close(groupSignal)
+	// 其实这个模型就是，main发信号让一组业务goroutine统一开始执行，这组业务goroutine都执行完毕之后再给main发送信号，main就可以接着执行后面的逻辑
 	<-c
 	fmt.Println("the group of workers work done!")
 }

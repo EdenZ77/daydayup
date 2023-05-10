@@ -8,7 +8,7 @@ import (
 
 func main() {
 
-	//创建一个周期性的定时器
+	//创建一个周期性的定时器，每3秒执行一次的定时器
 	ticker := time.NewTicker(3 * time.Second)
 
 	//定义计数器
@@ -35,3 +35,16 @@ func main() {
 	fmt.Println("main over")
 
 }
+
+//func worker() {
+//	heartbeat := time.NewTicker(30 * time.Second)
+//	defer heartbeat.Stop()
+//	for {
+//		select {
+//		case <-c:
+//			// ... do some stuff
+//		case <- heartbeat.C:
+//			//... do heartbeat stuff
+//		}
+//	}
+//}

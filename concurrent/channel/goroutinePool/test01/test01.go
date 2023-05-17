@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"hello/channel/goroutinePool/test01/pool"
+	pool2 "hello/concurrent/channel/goroutinePool/test01/pool"
 	"time"
 )
 
 func main() {
-	p := pool.New(5, pool.WithPreAllocWorkers(false), pool.WithBlock(false))
+	p := pool2.New(5, pool2.WithPreAllocWorkers(false), pool2.WithBlock(false))
 
 	time.Sleep(time.Second * 2)
 	for i := 0; i < 10; i++ {

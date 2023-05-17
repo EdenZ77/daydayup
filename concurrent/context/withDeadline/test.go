@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	d := time.Now().Add(50 * time.Second)
+	d := time.Now().Add(15 * time.Second)
 	ctx, cancel := context.WithDeadline(context.Background(), d)
 
 	// 尽管ctx会过期，但在任何情况下调用它的cancel函数都是很好的实践。

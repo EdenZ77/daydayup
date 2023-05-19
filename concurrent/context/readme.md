@@ -220,3 +220,46 @@ func main() {
 ```
 
 
+## 鸟窝笔记
+### WithCancel
+```go
+
+func WithCancel(parent Context) (ctx Context, cancel CancelFunc) {
+    c := newCancelCtx(parent)
+    propagateCancel(parent, &c)// 把c朝上传播
+    return &c, func() { c.cancel(true, Canceled) }
+}
+
+// newCancelCtx returns an initialized cancelCtx.
+func newCancelCtx(parent Context) cancelCtx {
+    return cancelCtx{Context: parent}
+}
+```
+当这个 cancelCtx 的 cancel 函数被调用的时候，或者 parent 的 Done 被 close 的时候，这个 cancelCtx 的 Done 才会被 close。
+
+cancelCtx 被取消时，它的 Err 字段就是下面这个 Canceled 错误：
+```go
+var Canceled = errors.New("context canceled")
+```
+
+### WithTimeout
+WithTimeout 其实是和 WithDeadline 一样，只不过一个参数是超时时间，一个参数是截止时间。超时时间加上当前时间，其实就是截止时间，因此，WithTimeout 的实现是：
+```go
+func WithTimeout(parent Context, timeout time.Duration) (Context, CancelFunc) {
+    // 当前时间+timeout就是deadline
+    return WithDeadline(parent, time.Now().Add(timeout))
+}
+```
+
+### WithDeadline
+如果它的截止时间晚于 parent 的截止时间，那么就以 parent 的截止时间为准，并返回一个类型为 cancelCtx 的 Context，因为 parent 的截止时间到了，就会取消这个 cancelCtx。
+
+如果当前时间已经超过了截止时间，就直接返回一个已经被 cancel 的 timerCtx。否则就会启动一个定时器，到截止时间取消这个 timerCtx。
+
+综合起来，timerCtx 的 Done 被 Close 掉，主要是由下面的某个事件触发的：
+* 截止时间到了；
+* cancel 函数被调用；
+* parent 的 Done 被 close。
+
+### 总结
+我们经常使用 Context 来取消一个 goroutine 的运行，这是 Context 最常用的场景之一，Context 也被称为 goroutine 生命周期范围（goroutine-scoped）的 Context，把 Context 传递给 goroutine。但是，goroutine 需要尝试检查 Context 的 Done 是否关闭了：

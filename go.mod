@@ -8,6 +8,7 @@ require (
 	github.com/google/uuid v1.1.2
 	github.com/google/wire v0.5.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.10.0
+	github.com/hashicorp/golang-lru v0.5.4
 	github.com/jinzhu/copier v0.3.5
 	github.com/json-iterator/go v1.1.12
 	github.com/julienschmidt/httprouter v1.3.0

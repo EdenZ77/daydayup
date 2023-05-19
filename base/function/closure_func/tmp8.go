@@ -8,15 +8,16 @@ import (
 // 闭包既可以通过函数参数使用外部函数变量，也可以直接使用，两者有什么区别呢？
 func main() {
 	// case 1 打印：i = 2 说明闭包内捕获外部函数变量是取的地址,而不是调用闭包时刻的参数值*******************非常重要的结论
-	//i := 1
-	//
-	//go func() {
-	//	time.Sleep(100 * time.Millisecond)
-	//	fmt.Println("i =", i)
-	//}()
-	//
-	//i = 2
-	//time.Sleep(1000 * time.Millisecond)
+	i := 1
+
+	go func() {
+		fmt.Println("before i=", i) // before i= 1
+		time.Sleep(2000 * time.Millisecond)
+		fmt.Println("after i =", i) // after i = 2
+	}()
+	time.Sleep(1000 * time.Millisecond)
+	i = 2
+	time.Sleep(5000 * time.Millisecond)
 
 	// case 1.1
 	//strArr := []string{"11", "22", "33"}
@@ -30,14 +31,14 @@ func main() {
 	//time.Sleep(1000 * time.Millisecond)
 
 	// case 1.2
-	strArr1 := []string{"11", "22", "33"}
-	// 闭包是引用传递
-	go func() {
-		time.Sleep(100 * time.Millisecond)
-		fmt.Println("arr1 =", strArr1) // arr1 = [11 22 33 1212]
-	}()
-	strArr1 = append(strArr1, "1212")
-	time.Sleep(1000 * time.Millisecond)
+	//strArr1 := []string{"11", "22", "33"}
+	//// 闭包是引用传递
+	//go func() {
+	//	time.Sleep(100 * time.Millisecond)
+	//	fmt.Println("arr1 =", strArr1) // arr1 = [11 22 33 1212]
+	//}()
+	//strArr1 = append(strArr1, "1212")
+	//time.Sleep(1000 * time.Millisecond)
 
 	//slice := new([]int)
 	// case 2 打印：i = 1

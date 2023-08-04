@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	fileURL := "https://ds.cloudapis.bigdata.gatorcloud.skyguardmis.com/securitySiteFulldb/security_fulldb_v2307270301.bin"
+	fileURL := "https://ds.cloudapis.bigdata.gatorcloud.skyguardmis.com/securitySiteFulldb/security_fulldb_v2308040301.bin"
 	filePath := "file.zip"
 
 	err := downloadFile(fileURL, filePath)
@@ -51,13 +51,15 @@ func downloadFile(url string, filePath string) error {
 
 	// 创建 HTTP 请求
 	httpClient := NewHttpClient()
-	resp, err := httpClient.Do(req)
-
 	// 发送请求并获取响应
-	//resp, err := http.DefaultClient.Do(req)
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		return err
 	}
+	contentLength := resp.ContentLength
+	// 文件中的字节数：818554942
+	// 当重新下载时，文件总字节数就是还没有被下载的数量
+	fmt.Printf("当前文件剩余的总字节数=%d\n", contentLength)
 	defer resp.Body.Close()
 
 	// 检查服务器是否支持断点续传
@@ -71,11 +73,36 @@ func downloadFile(url string, filePath string) error {
 		fmt.Println("服务器支持断点续传。")
 	}
 
-	// 将下载的内容写入文件
-	_, err = io.Copy(file, resp.Body)
+	// 创建一个缓冲区，并限制每次读取的字节数为100 000
+	count := startOffset
+	fmt.Printf("==============文件中已下载字节数fileSize=%d\n", startOffset)
+	buffer := make([]byte, 100000)
+	for {
+		n, err := resp.Body.Read(buffer)
+		if err != nil && err != io.EOF {
+			return err
+		}
+		if n == 0 {
+			break
+		}
+		// 写入文件的字节数限制为实际读取的字节数
+		writeByte, err := file.Write(buffer[:n])
+		if err != nil {
+			return err
+		}
+		count = count + int64(writeByte)
+		fmt.Printf("已下载字节count=%d\n", count)
+	}
+	// 刷盘
+	if err := file.Sync(); err != nil {
+		return err
+	}
+	info, err := file.Stat()
 	if err != nil {
 		return err
 	}
+	endFileSize := info.Size()
+	fmt.Printf("下载完成后，文件大小：%d\n", endFileSize)
 
 	return nil
 }
@@ -84,6 +111,6 @@ func NewHttpClient() *http.Client {
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
-	client := &http.Client{Transport: tr, Timeout: time.Hour * 7,}
+	client := &http.Client{Transport: tr, Timeout: time.Hour * 7}
 	return client
 }

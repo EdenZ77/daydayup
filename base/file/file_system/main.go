@@ -4,6 +4,7 @@ import (
 	"embed"
 	_ "embed"
 	"fmt"
+	"io/fs"
 )
 
 /*
@@ -47,6 +48,20 @@ func main() {
 	fmt.Println(string(data))
 
 	fmt.Println("========嵌入为文件系统：嵌入指定后缀文件=========")
-	data, _ = pre.ReadFile("file/name.txt")
-	fmt.Println(string(data))
+	//data, _ = pre.ReadFile("file/name.txt")
+	//fmt.Println(string(data))
+
+	sub, err := fs.Sub(pre, "file")
+	if err != nil {
+		fmt.Printf("fs.Sub err:%#v\n", err)
+		return
+	}
+	file, err := sub.Open("name.txt")
+	if err != nil {
+		fmt.Printf("sub.Open err:%#v\n", err)
+		return
+	}
+	b := make([]byte, 100)
+	file.Read(b)
+	fmt.Println(string(b))
 }

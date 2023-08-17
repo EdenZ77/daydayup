@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 func main() {
 	//fmt.Printf("%q\n", strings.Split("a man a plan a canal panama", "a "))
@@ -22,6 +25,8 @@ func main() {
 	//trim := strings.Trim("   123 ", " ")
 	//fmt.Println(trim, len(trim))
 
-	a := []string{"34", "35"}
-	fmt.Printf("%s", a)
+	//a := []string{"34", "35"}
+	//fmt.Printf("%s", a)
+	timeUnix := time.Now().Unix()
+	fmt.Println(timeUnix)
 }

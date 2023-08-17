@@ -260,22 +260,61 @@ type Bad[T any] interface {
 */
 
 // ===============测试验证一般接口不能用来定义变量
-type ReadWriter interface {
+type ReadWriterx interface {
 	~string | ~[]rune
 
-	Read(p []byte) (n int, err error)
-	Write(p []byte) (n int, err error)
+	Readx(p []byte) (n int, err error)
+	Writex(p []byte) (n int, err error)
 }
 
-type StringReadWriter string
+type StringReadWriterx string
 
-func (s StringReadWriter) Read(p []byte) (n int, err error) {
+func (s StringReadWriterx) Readx(p []byte) (n int, err error) {
 	return 0, nil
 }
-func (s StringReadWriter) Write(p []byte) (n int, err error) {
+func (s StringReadWriterx) Writex(p []byte) (n int, err error) {
 	return 0, nil
 }
 
 func main() {
-	//var xx ReadWriter = StringReadWriter("xx") // × Interface includes constraint elements '~string', '~[]rune', can only be used in type parameters
+	/*
+		如果接口内不光只有方法，还有类型的话，这种接口被称为 一般接口(General interface)，如下例子：
+			type Uint interface { // 接口 Uint 中有类型，所以是一般接口
+				~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64
+			}
+
+			type ReadWriter interface {  // ReadWriter 接口既有方法也有类型，所以是一般接口
+				~string | ~[]rune
+
+				Read(p []byte) (n int, err error)
+				Write(p []byte) (n int, err error)
+			}
+
+		一般接口类型不能用来定义变量，只能用于泛型的类型约束中。所以以下的用法是错误的：
+			type Uint interface {
+			    ~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64
+			}
+
+			var uintInf Uint // 错误。Uint是一般接口，只能用于类型约束，不得用于变量定义
+	*/
+	// 这一限制保证了一般接口的使用被限定在了泛型之中，不会影响到Go1.18之前的代码，同时也极大减少了书写代码时的心智负担
+
+	//var xx ReadWriterx = StringReadWriterx("xx") // × Interface includes constraint elements '~string', '~[]rune', can only be used in type parameters
+}
+
+// type MyInt int
+
+type MyStruct struct {
+	name string
+}
+
+type xx struct{ Data interface{} }
+
+type _ interface {
+	//~xx // 错误
+	//~MyStruct // 错误
+	~[]byte // 正确
+	~struct{ Data interface{} }
+	//~MyInt // 错误，~后的类型必须为基本类型
+	//~error // 错误，~后的类型不能为接口
 }

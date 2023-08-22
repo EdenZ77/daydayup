@@ -15,7 +15,8 @@ func main() {
 	// Golang 对类型要求非常严格，类型一定要完全符合
 	// 如下两个，一个是*float64，一个是float64，如果弄混，则会panic
 	convertPointer := pointer.Interface().(*float64)
-	convertValue := value.Interface().(float64)
+	//convertValue := value.Interface().(float64)
+	convertValue := value.Interface()
 
 	fmt.Println(convertPointer) // 0xc00001c098
 	fmt.Println(convertValue)   // 1.2345

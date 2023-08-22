@@ -34,3 +34,26 @@ func main() {
 	pointer = reflect.ValueOf(num)
 	//newValue = pointer.Elem() // 如果非指针，这里直接panic，“panic: reflect: call of reflect.Value.Elem on float64 Value”
 }
+
+/*
+func main() {
+    i := 1
+    v := reflect.ValueOf(&i)
+    v.Elem().SetInt(10)
+    fmt.Println(i)
+}
+
+$ go run reflect.go
+10
+
+这种获取指针对应的 reflect.Value 并通过 Elem 方法迂回的方式就能够获取到可以被设置的变量，这一复杂的过程主要也是因为 Go 语言的函数调用都是值传递的，我们可以将上述代码理解成：
+func main() {
+    i := 1
+    v := &i
+    *v = 10
+}
+
+如果不能直接操作 i 变量修改其持有的值，我们就只能获取 i 变量所在地址并使用 *v 修改所在地址中存储的整数。
+
+
+*/

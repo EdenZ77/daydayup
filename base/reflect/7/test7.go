@@ -14,6 +14,7 @@ func main() {
 	var Data []User
 	Data = append(Data, User{Uid: 1, Name: "test1", Code: "A"})
 	Data = append(Data, User{Uid: 2, Name: "test2", Code: "B"})
+	Data = append(Data, User{Uid: 2, Name: "test3", Code: "C"})
 	res := ListToMap(Data, "Name")
 	fmt.Println(res)
 }
@@ -31,7 +32,7 @@ func ListToMap(list interface{}, key string) map[string]interface{} {
 	return res
 }
 
-//interface{} change to []interface{}
+// interface{} change to []interface{}
 func ToSlice(arr interface{}) []interface{} {
 	ret := make([]interface{}, 0)
 	v := reflect.ValueOf(arr)

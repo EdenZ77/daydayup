@@ -1,0 +1,51 @@
+这部分主要是研究channel——极客时间go第一课
+
+1、对一个关闭的通道进行接收会一直获取值直到通道为空，对一个关闭的并且没有值的通道执行接收操作会得到对应类型的零值。
+
+2、对于没有关闭无值的通道执行接收操作会阻塞，对没有关闭但装满的通道执行发送操作会阻塞
+
+3、通常我们会选择使用for range循环从通道中接收值，当通道被关闭后，会在通道内的所有值被接收完毕后会自动退出循环。
+   但是如果通道没有close，使用for range则会报错
+
+4、当 select 语句中没有 default 分支，而且所有 case 中的 channel 操作都阻塞了的时候，整个 select 语句都将被阻塞，
+直到某一个 case 上的 channel 变成可发送，或者某个 case 上的 channel 变成可接收，select 语句才可以继续进行下去。
+
+5、无缓冲channel的惯用法
+    1. 用作信号传递 ：关闭一个无缓冲 channel 会让所有阻塞在这个 channel 上的接收操作返回，从而实现了一种 1 对 n 的“广播”机制。
+    2. 用于替代锁机制：累加器，分析源码发现，这就是一个goroutine不断产生数据并塞入无缓冲channel，多个goroutine并发消费，这就是安全计数器的实现
+
+6、带缓冲channel的惯用法
+    1. 用作消息队列
+    2. 用作计数信号量
+
+7、len(channel)的应用
+len 是 Go 语言的一个内置函数，它支持接收数组、切片、map、字符串和 channel 类型的参数，并返回对应类型的“长度”，也就是一个整型值。
+针对 channel ch 的类型不同，len(ch) 有如下两种语义：
+    当 ch 为无缓冲 channel 时，len(ch) 总是返回 0；
+    当 ch 为带缓冲 channel 时，len(ch) 返回当前 channel ch 中尚未被读取的元素个数。
+
+8、nil channel的妙用
+如果一个 channel 类型变量的值为 nil，我们称它为 nil channel。nil channel 有一个特性，那就是对 nil channel 的读写都会发生阻塞
+
+9、与select结合使用的常用模式
+第一种用法：利用 default 分支避免阻塞
+    select 语句的 default 分支的语义，就是在其他非 default 分支因通信未就绪，而无法被选择的时候执行的，这就给 default 分支赋予了一种“避免阻塞”的特性。
+第二种用法：实现超时机制
+    带超时机制的 select，是 Go 中常见的一种 select 和 channel 的组合用法。通过超时事件，我们既可以避免长期陷入某种操作的等待中，也可以做一些异常处理工作。test6
+第三种用法：实现心跳机制
+    结合 time 包的 Ticker，我们可以实现带有心跳机制的 select。这种机制让我们可以在监听 channel 的同时，执行一些周期性的任务 test7
+
+
+workerpool的实现原理：
+workerpool 的工作逻辑通常都很简单，所以即便是用于生产环境的 workerpool 实现，代码规模也都在千行左右。
+当然，workerpool 有很多种实现方式，这里为了更好地演示 Go 并发模型的应用模式，以及并发原语间的协作，
+我们采用完全基于 channel+select 的实现方案，不使用其他数据结构，也不使用 sync 包提供的各种同步结构，比如 Mutex、RWMutex，以及 Cond 等。
+
+
+
+
+
+
+
+
+

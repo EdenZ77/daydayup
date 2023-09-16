@@ -1,0 +1,23 @@
+syntax = "proto3"; // 版本声明，使用Protocol Buffers v3版本
+
+package pbbb.admin.v1;
+// ./pbs表示生成的go文件的存放地址，会自动生成目录的
+//  表示生成的go文件所属的包名
+option go_package = "example.com/testtt/ttt/ddd";
+
+
+// 定义一个打招呼服务
+service Greeter {
+  // SayHello 方法
+  rpc SayHello (HelloRequest) returns (HelloReply) {}
+}
+
+// 包含人名的一个请求消息
+message HelloRequest {
+  string name = 1;
+}
+
+// 包含问候语的响应消息
+message HelloReply {
+  string message = 1;
+}

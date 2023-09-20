@@ -39,6 +39,8 @@ func test1() {
 	s1 := slice[2:5]     // s1 从 slice 索引2（闭区间）到索引5（开区间，元素真正取到索引4），长度为3，容量默认到数组结尾，为8。
 	s2 := s1[2:6:7]      //  s2 从 s1 的索引2（闭区间）到索引6（开区间，元素真正取到索引5），容量到索引7（开区间，真正到索引6），为5。
 	fmt.Println(s1)      // [2 3 4]
+	fmt.Println(len(s1)) // 3
+	fmt.Println(cap(s1)) // 8
 	fmt.Println(s2)      // [4 5 6 7]
 	fmt.Println(len(s2)) // 4
 	fmt.Println(cap(s2)) // 5

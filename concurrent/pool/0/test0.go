@@ -36,6 +36,7 @@ func main() {
 	pool.Put(p)
 
 	fmt.Println("Pool 里已有一个对象：&{first}，调用 Get: ", pool.Get().(*Person))
+	// 这个时候上面已经get了，pool里面没有对象了，所以会调用New函数创建一个新的对象
 	person2 := pool.Get().(*Person)
 	person2.Name = "second"
 	fmt.Println("Pool 没有对象了，调用 Get: ", person2)

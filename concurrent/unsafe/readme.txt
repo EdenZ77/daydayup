@@ -1,6 +1,7 @@
 参考资料：
 极客兔兔：https://geektutu.com/post/hpg-struct-alignment.html
 https://www.cnblogs.com/-wenli/p/12682477.html
+https://mp.weixin.qq.com/s/dulgHWM-mjrYIdD9nHZyYg
 
 unsafe.Pointer称为通用指针，官方文档对该类型有四个重要描述：
 （1）任何类型的指针都可以被转化为Pointer

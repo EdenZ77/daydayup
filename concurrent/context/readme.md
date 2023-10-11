@@ -1,6 +1,9 @@
 参考资料：
 https://segmentfault.com/a/1190000040917752
 
+当使用 context.Context 类型保存 KV 对时, key 不能使用原生类型，而应该使用派生类型。详细说明请参考下面的链接：
+https://cloud.tencent.com/developer/article/2313242
+
 
 ## 创建context
 context包主要提供了两种方式创建context:

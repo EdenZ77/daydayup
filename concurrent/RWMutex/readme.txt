@@ -7,3 +7,5 @@ RLocker：这个方法的作用是为读操作返回一个 Locker 接口的对�
 
 目前阶段暂时了解基本使用，实现原理后期追加
 
+源码理解：
+https://www.51cto.com/article/713044.html

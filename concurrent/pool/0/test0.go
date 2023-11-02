@@ -35,13 +35,13 @@ func initPool() {
 func main() {
 	initPool()
 
-	p := pool.Get().(*Person)
+	p := pool.Get().(*Person) // 第一次从池中拿，由于池中什么都没有，所以创建对象
 	fmt.Println("首次从pool中获取：", p)
 
 	p.Name = "first"
 	fmt.Printf("设置 p.Name = %s\n", p.Name)
 
-	pool.Put(p)
+	pool.Put(p) // 将带有属性值的对象put到池中，那么下一次取出来的就是这个带有属性值的对象，所以有时候需要我们根据业务判断是否需要清理对象的属性值
 
 	// Pool 里已有一个对象：&{first}，调用 Get:  &{first}
 	fmt.Println("Pool 里已有一个对象：&{first}，调用 Get: ", pool.Get().(*Person))

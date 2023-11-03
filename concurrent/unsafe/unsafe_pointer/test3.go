@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"hello/concurrent/unsafe/3/p"
+	"hello/concurrent/unsafe/unsafe_pointer/p"
 	"unsafe"
 )
 

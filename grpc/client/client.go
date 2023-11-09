@@ -3,14 +3,16 @@ package main
 import (
 	"context"
 	"fmt"
+	"google.golang.org/grpc/credentials/insecure"
 	pb "hello/grpc/pbb"
+	"time"
 
 	"google.golang.org/grpc"
 )
 
 func main() {
 	// 连接服务器
-	conn, err := grpc.Dial(":8972", grpc.WithInsecure())
+	conn, err := grpc.Dial(":8972", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		fmt.Printf("faild to connect: %v", err)
 	}
@@ -18,7 +20,9 @@ func main() {
 
 	c := pb.NewGreeterClient(conn)
 	// 调用服务端的SayHello
-	r, err := c.SayHello(context.Background(), &pb.HelloRequest{Name: "q1mi"})
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	r, err := c.SayHello(ctx, &pb.HelloRequest{Name: "q1mi"})
 	if err != nil {
 		fmt.Printf("could not greet: %v", err)
 	}

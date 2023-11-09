@@ -1,9 +1,11 @@
 syntax = "proto3"; // 版本声明，使用Protocol Buffers v3版本
 
-package pbbb.admin.v1;
+package packagexx;
 // ./pbs表示生成的go文件的存放地址，会自动生成目录的
 //  表示生成的go文件所属的包名
-option go_package = "example.com/testtt/ttt/ddd";
+
+// The import path must contain at least one period ('.') or forward slash ('/') character.
+option go_package = "bb.xx/pbb"; // 指定生成的Go代码在你项目中的导入路径
 
 
 // 定义一个打招呼服务

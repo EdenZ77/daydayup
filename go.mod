@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/bytedance/gopkg v0.0.0-20230728082804-614d0af6619b
+	github.com/darren/gpac v0.0.0-20210609082804-b56d6523a3af
 	github.com/go-redis/redis/v9 v9.0.0-beta.2
 	github.com/golang/glog v1.0.0
 	github.com/golang/protobuf v1.5.3
@@ -42,6 +43,8 @@ require (
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
+	github.com/dlclark/regexp2 v1.4.1-0.20201116162257-a2a8dda75c91 // indirect
+	github.com/dop251/goja v0.0.0-20210427212725-462d53687b0d // indirect
 	github.com/emicklei/go-restful/v3 v3.8.0 // indirect
 	github.com/fortytw2/leaktest v1.3.0 // indirect
 	github.com/go-logr/logr v1.2.4 // indirect
@@ -49,6 +52,7 @@ require (
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect
 	github.com/go-openapi/jsonreference v0.19.5 // indirect
 	github.com/go-openapi/swag v0.19.14 // indirect
+	github.com/go-sourcemap/sourcemap v2.1.3+incompatible // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/google/gnostic v0.5.7-v3refs // indirect
 	github.com/google/gofuzz v1.1.0 // indirect

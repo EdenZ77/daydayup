@@ -7,7 +7,6 @@ require (
 	github.com/darren/gpac v0.0.0-20210609082804-b56d6523a3af
 	github.com/go-redis/redis/v9 v9.0.0-beta.2
 	github.com/golang/glog v1.0.0
-	github.com/golang/protobuf v1.5.3
 	github.com/google/uuid v1.1.2
 	github.com/google/wire v0.5.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.10.0
@@ -54,6 +53,7 @@ require (
 	github.com/go-openapi/swag v0.19.14 // indirect
 	github.com/go-sourcemap/sourcemap v2.1.3+incompatible // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
+	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/gnostic v0.5.7-v3refs // indirect
 	github.com/google/gofuzz v1.1.0 // indirect
 	github.com/imdario/mergo v0.3.6 // indirect

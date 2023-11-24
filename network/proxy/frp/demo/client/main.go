@@ -11,9 +11,9 @@ import (
 /*
 我们先来实现相对简单的客户端，客户端主要做的事情是 3 件：
 
-连接服务端的控制通道
-等待服务端从控制通道中发来建立连接的消息
-收到建立连接的消息时，将本地服务和远端隧道建立连接（这里就要用到我们的工具方法了）
+1、连接服务端的控制通道
+2、等待服务端从控制通道中发来建立连接的消息
+3、收到建立连接的消息时，将本地服务和远端隧道建立连接（这里就要用到我们的工具方法了）
 */
 var (
 	// 本地需要暴露的服务端口
@@ -27,6 +27,7 @@ var (
 )
 
 func main() {
+	// 服务器端的控制通道需要有对应的服务端程序来发送新连接的指令。同时，要确保网络安全性，控制通道应该仅对信任的客户端开放。
 	tcpConn, err := network.CreateTCPConn(remoteControlAddr)
 	if err != nil {
 		log.Println("[连接失败]" + remoteControlAddr + err.Error())
@@ -41,7 +42,9 @@ func main() {
 			break
 		}
 
-		// 当有新连接信号出现时，新建一个tcp连接
+		// 每次接收到 network.NewConnection 消息时，connectLocalAndRemote 都在新的 goroutine 中调用，因此每个请求都会产生各自的本地和远程连接。
+		// 这意味着如果服务端连续发送多个 network.NewConnection 请求，客户端将为每个请求创建一个新的隧道连接。这些隧道是独立的，允许多个用户的请求通过客户端转发到本地服务。
+		// 每个隧道的一端是客户端所在机器上的本地服务地址 127.0.0.1:32768，另一端是服务端的远端服务地址 111.111.111.111:8008。
 		if s == network.NewConnection+"\n" {
 			go connectLocalAndRemote()
 		}
@@ -74,6 +77,7 @@ func connectLocal() *net.TCPConn {
 	return conn
 }
 
+// 此方法将连接8008端口的远端服务
 func connectRemote() *net.TCPConn {
 	conn, err := network.CreateTCPConn(remoteServerAddr)
 	if err != nil {

@@ -51,6 +51,7 @@ func createControlChannel() {
 
 	log.Println("[已监听]" + controlAddr)
 	for {
+		// 监听到有客户端来连接了
 		tcpConn, err := tcpListener.AcceptTCP()
 		if err != nil {
 			log.Println(err)
@@ -59,6 +60,7 @@ func createControlChannel() {
 
 		log.Println("[新连接]" + tcpConn.RemoteAddr().String())
 		// 如果当前已经有一个客户端存在，则丢弃这个链接
+		// 考虑如何做到多个客户端的连接呢
 		if clientConn != nil {
 			_ = tcpConn.Close()
 		} else {
@@ -68,7 +70,7 @@ func createControlChannel() {
 	}
 }
 
-// 和客户端保持一个心跳链接
+// 和客户端保持一个心跳链接，持续发送心跳消息给客户端，以保持连接活跃。
 func keepAlive() {
 	go func() {
 		for {
@@ -94,11 +96,13 @@ func acceptUserRequest() {
 	}
 	defer tcpListener.Close()
 	for {
+		// 新用户连接后，将连接保存到连接池，并通知客户端有新的连接请求。
 		tcpConn, err := tcpListener.AcceptTCP()
 		if err != nil {
 			continue
 		}
 		addConn2Pool(tcpConn)
+		// 来一个用户的请求，就通知一下客户端创建新的隧道通道
 		sendMessage(network.NewConnection + "\n")
 	}
 }
@@ -126,6 +130,8 @@ func sendMessage(message string) {
 
 // 接收客户端来的请求并建立隧道
 func acceptClientRequest() {
+	// 当客户端收到 network.NewConnection 消息时，会调用 connectLocalAndRemote 方法，该方法会创建本地和远程的连接，
+	// 创建远程连接时会触发了服务端的隧道监听。
 	tcpListener, err := network.CreateTCPListener(tunnelAddr)
 	if err != nil {
 		panic(err)
@@ -144,7 +150,7 @@ func acceptClientRequest() {
 func establishTunnel(tunnel *net.TCPConn) {
 	connectionPoolLock.Lock()
 	defer connectionPoolLock.Unlock()
-
+	// 从连接池中找到一个连接，然后将这个连接和隧道连接起来
 	for key, connMatch := range connectionPool {
 		if connMatch.accept != nil {
 			go network.Join2Conn(connMatch.accept, tunnel)

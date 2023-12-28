@@ -18,7 +18,7 @@ func main() {
 	r, _ := pac.FindProxyForURL("http://www.example.com/")
 	fmt.Println(r) // returns PROXY 127.0.0.1:8080; PROXY 127.0.0.1:8081; DIRECT
 
-	// Get issues request via a list of proxies and returns at the first request that succeeds
-	resp, _ := pac.Get("http://www.example.com/")
+	// 想要使用代理服务器，需要在本地启动代理服务器，监听8080端口，也就是proxy_server.go中的代码
+	resp, _ := pac.Get("https://www.baidu.com/")
 	fmt.Println(resp.Status)
 }

@@ -52,8 +52,8 @@ func handleClient(conn net.Conn) {
 }
 
 func handleConnect(conn net.Conn, req *http.Request) {
-	// 解析目标服务器的主机名和端口号
-	targetAddr := req.URL.Host
+	// 解析目标服务器的主机名和端口号，例如：CONNECT www.example.com:443 HTTP/1.1
+	targetAddr := req.URL.Host // www.example.com:443
 	if strings.Index(targetAddr, ":") == -1 {
 		targetAddr += ":443"
 	}
@@ -92,8 +92,11 @@ func handleConnect(conn net.Conn, req *http.Request) {
 }
 
 func handleHTTP(conn net.Conn, req *http.Request) {
-	// 建立到目标服务器的 TCP 连接
-	targetConn, err := net.Dial("tcp", req.Host)
+	// 建立到目标服务器的 TCP 连接，
+	// 例如：GET /index.html HTTP/1.1
+	//      Host: www.example.com:80
+	// 如果 req.Host 只包含域名，那么 net.Dial 将使用默认的HTTP端口号80进行连接。如果 req.Host 包括端口号，net.Dial 将使用指定的端口号建立连接。
+	targetConn, err := net.Dial("tcp", req.Host) // www.example.com:80
 	if err != nil {
 		fmt.Println("连接目标服务器失败：", err)
 		return

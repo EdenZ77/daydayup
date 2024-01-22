@@ -7,6 +7,10 @@ import (
 	"time"
 )
 
+// BankBusinessHandler
+/*
+参考资料：https://mp.weixin.qq.com/s/-Ysho1jI9MfrAIrplzj7UQ
+*/
 type BankBusinessHandler interface {
 	// TakeRowNumber 排队拿号
 	TakeRowNumber()

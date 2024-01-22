@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 )
 
 type Level int
@@ -28,13 +29,17 @@ func NewBaseLogger(name string) *BaseLogger {
 	return &BaseLogger{name: name}
 }
 
-// Log 调用 doLog 方法
+// Log 这是一个模板方法，它定义了日志记录的通用步骤
 func (l *BaseLogger) Log(level Level, message string) {
-	// 此处抽象调用，具体实现由子类提供
-	l.doLog(level, message)
+	// 通用操作：添加时间戳
+	timestamp := time.Now().Format(time.RFC3339)
+	formattedMessage := fmt.Sprintf("[%s] [%s]: %s", timestamp, l.name, message)
+
+	// 调用 doLog 方法，由子类实现具体的日志记录方式
+	l.doLog(level, formattedMessage)
 }
 
-// doLog 作为抽象方法，具体实现由子类提供
+// doLog 抽象方法，子类必须提供实现
 func (l *BaseLogger) doLog(level Level, message string) {
 	// 抽象方法，无实现
 }
@@ -52,7 +57,7 @@ func NewFileLogger(name string) *FileLogger {
 
 // doLog 在 FileLogger 中的具体实现
 func (f *FileLogger) doLog(level Level, message string) {
-	fmt.Printf("[%s] [File] [%v]: %s\n", f.name, level, message)
+	fmt.Printf("[File] %s\n", message)
 }
 
 // MessageQueueLogger 结构体嵌入 BaseLogger，并提供 doLog 的具体实现
@@ -68,7 +73,7 @@ func NewMessageQueueLogger(name string) *MessageQueueLogger {
 
 // doLog 在 MessageQueueLogger 中的具体实现
 func (m *MessageQueueLogger) doLog(level Level, message string) {
-	fmt.Printf("[%s] [MessageQueue] [%v]: %s\n", m.name, level, message)
+	fmt.Printf("[MessageQueue] %s\n", message)
 }
 
 func main() {
@@ -76,11 +81,11 @@ func main() {
 
 	fLogger := NewFileLogger("FileLogger")
 	logger = fLogger
-	// 由于 FileLogger 提供了 doLog 的实现，这里会调用 FileLogger 的 doLog 方法
+	// 使用模板方法 Log，它包含了通用的日志记录步骤，以及特定于 FileLogger 的步骤
 	logger.Log(LevelInfo, "This is an info message for file logger.")
 
 	mqLogger := NewMessageQueueLogger("MQLogger")
 	logger = mqLogger
-	// 由于 MessageQueueLogger 提供了 doLog 的实现，这里会调用 MessageQueueLogger 的 doLog 方法
+	// 使用模板方法 Log，它包含了通用的日志记录步骤，以及特定于 MessageQueueLogger 的步骤
 	logger.Log(LevelDebug, "This is a debug message for message queue logger.")
 }

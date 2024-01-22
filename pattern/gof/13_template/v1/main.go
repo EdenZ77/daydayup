@@ -53,6 +53,12 @@ func (*DepositBusinessHandler) Commentate() {
 	fmt.Println("重写评价")
 }
 
+// DefaultBusinessHandler
+/*
+注意，上面的DefaultBusinessHandler并没有实现我们想要留给具体子类实现的HandleBusiness方法，
+这样 DefaultBusinessHandler 就不能算是BankBusinessHandler接口的实现，这么做是为了这个类型只能用于被实现类包装，
+让 Go 语言的类型检查能够帮我们强制要求，必须用存款或者取款这样子类去实现HandleBusiness方法，整个银行办理业务的流程的程序才能运行起来。
+*/
 type DefaultBusinessHandler struct {
 }
 

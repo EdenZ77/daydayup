@@ -6,6 +6,9 @@ import "fmt"
 参考资料：https://mp.weixin.qq.com/s/MlC6-TDf06LGpF8hxcSV_w
 极客时间的设计模式：关于简单工厂与工厂方法的讲解，我觉得讲的很好。
 */
+/*
+抽象工厂相比工厂方法，可以生成多个产品
+*/
 
 type AbstractFactory interface {
 	CreateTelevision() ITelevision
@@ -53,7 +56,7 @@ func (mf *MiFactory) CreateAirConditioner() IAirConditioner {
 type MiTV struct{}
 
 func (mt *MiTV) Watch() {
-	fmt.Println("Watch HuaWei TV")
+	fmt.Println("Watch Mi TV")
 }
 
 type MiAirConditioner struct{}

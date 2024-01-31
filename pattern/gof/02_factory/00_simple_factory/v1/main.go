@@ -28,6 +28,7 @@ func (*EnPrinter) Print(name string) string {
 	return fmt.Sprintf("Hello, %s", name)
 }
 
+// NewPrinter 是简单工厂函数，其实真实生产环境中，绝大部分都是这种简单工厂函数
 func NewPrinter(lang string) Printer {
 	switch lang {
 	case "cn":

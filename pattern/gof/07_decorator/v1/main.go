@@ -2,6 +2,12 @@ package main
 
 import "fmt"
 
+/*
+参考资料：https://mp.weixin.qq.com/s?__biz=MzUzNzAzMTc3MA==&mid=2247484431&idx=1&sn=2a7cd975bd703b478efe62f971297253&chksm=faec613acd9be82c0839181df010d0fb1bb8ef42ffd7d6d42040c7a8b57a96cde6caa70d34fa&scene=178&cur_album_id=1908992469812199431#rd
+
+
+*/
+
 // Aircraft 飞行器接口，有fly函数
 type Aircraft interface {
 	fly()

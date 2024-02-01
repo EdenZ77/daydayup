@@ -11,6 +11,9 @@ import "fmt"
 
 这个触达系统的业务场景是：已经定义好触达的紧急情况，触达需要的数据来源不同，当运营使用的时候，根据触达紧急情况，配置好数据（文案、收件人等）即可。
 可以看出：一个分类是触达方式、一个分类是触达紧急情况。
+
+一定学习极客时间关于API监控报警的例子，讲解了演变过程。
+https://time.geekbang.org/column/article/202786?screen=full
 */
 
 // MessageSend 消息发送接口
@@ -77,6 +80,7 @@ type TouchUrgent struct {
  * @param msg
  */
 func (t *TouchUrgent) do(msg string) {
+	// 封装复杂的业务逻辑，试图将一个类的复杂代码拆分到更细小的类，然后再通过某种更合理的结构组装在一起
 	fmt.Println("touch urgent 从db获取接收人等信息")
 	t.base.do(msg)
 }

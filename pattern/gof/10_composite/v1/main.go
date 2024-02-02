@@ -5,6 +5,10 @@ import (
 	"os"
 )
 
+/*
+参考资料：https://time.geekbang.org/column/article/207456
+*/
+
 // FileSystemNode 接口定义了文件系统节点共有的行为
 type FileSystemNode interface {
 	CountNumOfFiles() int

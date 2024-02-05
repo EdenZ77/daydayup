@@ -1,7 +1,7 @@
 ## 定义
 观察者模式：观察者模式定义了一种一对多的依赖关系，让多个观察者对象同时监听某一个主题对象。这个主题对象在状态发生变化时，会通知所有观察者对象，使他们能够自动更新自己。
 
-![img.png](img.png)
+一般情况下，被依赖的对象叫作被观察者（Observable），依赖的对象叫作观察者（Observer）。不过，在实际的项目开发中，这两种对象的称呼是比较灵活的，有各种不同的叫法，比如：Subject-Observer、Publisher-Subscriber、Producer-Consumer、EventEmitter-EventListener、Dispatcher-Listener。不管怎么称呼，只要应用场景符合刚刚给出的定义，都可以看作观察者模式。
 
 观察者模式算是比较通用的设计模式了，思路也比较清晰。Subject里有Observer集合，当Subject有更新时，通知各个Observer。Subject为了管理Observer，自身设置了增加、删除功能。
 

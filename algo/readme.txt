@@ -1,11 +1,8 @@
-学习常用的算法和数据结构
-https://github.com/halfrost/LeetCode-Go
-目录：leetcode和structures
+左程云老师算法课程学习
+文字资料：https://www.mashibing.com/course/1052
+所有代码：https://github.com/algorithmzuo
 
 
-https://greyireland.gitbook.io/algorithm-pattern/
-目录：data_struct
-    introduction 入门篇
 
 
 科学计算

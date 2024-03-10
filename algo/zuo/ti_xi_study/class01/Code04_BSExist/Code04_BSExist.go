@@ -16,7 +16,7 @@ func exist(sortedArr []int, num int) bool {
 	R := len(sortedArr) - 1
 	var mid int
 	// L..R
-	for L < R { // 当 L..R 至少有两个数时
+	for L <= R { // 当 L..R 至少有两个数时
 		mid = L + ((R - L) >> 1)
 		if sortedArr[mid] == num {
 			return true
@@ -26,7 +26,13 @@ func exist(sortedArr []int, num int) bool {
 			L = mid + 1
 		}
 	}
-	return sortedArr[L] == num
+	// for循环写成 L < R
+	// 当循环结束时，如果 num 没有找到，L 和 R 可能会收敛到同一个索引上，这个索引是 num 可能的位置（如果 num 存在于数组中）。
+	// 注意：不可写成sortedArr[R] == num，如果num小于数组中最小的数时，R有可能=-1，导致下标越界
+	//return sortedArr[L] == num
+
+	// for循环写成 L <= R
+	return false
 }
 
 // test 是用于测试在未排序数组中是否存在数字 num

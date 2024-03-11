@@ -24,6 +24,7 @@ func nearestIndex(arr []int, value int) int {
 			L = mid + 1
 		}
 	}
+	// 如果循环条件为 L <= R，直接返回即可。
 	//return index
 
 	// 需要在循环之后再检查一次 L 指向的位置

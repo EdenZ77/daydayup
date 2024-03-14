@@ -91,12 +91,47 @@ rightOne := N & (^N + 1) // 二进制数的相反数是按位取反再加1
 
 一个数组中有两种数出现了奇数次，其他数都出现了偶数次，怎么找到并打印这两种数
 ```go
+func printOddTimesNum2(arr []int) {
+	eor := 0
+	for i := 0; i < len(arr); i++ {
+		eor ^= arr[i]
+	}
 
+	rightOne := eor & (-eor)
+
+	onlyOne := 0
+	for i := 0; i < len(arr); i++ {
+		if (arr[i] & rightOne) != 0 {
+			onlyOne ^= arr[i]
+		}
+	}
+	fmt.Println(onlyOne, eor^onlyOne)
+}
 ```
 
 一个数组中有一种数出现K次，其他数都出现了M次，已知M > 1，K < M，找到出现了K次的数,要求额外空间复杂度O(1)，时间复杂度O(N)
 ```go
+func km(arr []int, k int, m int) int {
+	help := make([]int, 32)
+	// 统计数组中所有数据在0~31每个位置上面1的个数
+	for _, num := range arr {
+		for i := 0; i < 32; i++ {
+			help[i] += (num >> i) & 1
+		}
+	}
 
+	ans := 0
+	// 遍历刚才获得数组0~31的每个位置
+	for i := 0; i < 32; i++ {
+		help[i] %= m
+		// 如果该位置不能够被m整除，表明出现k次的那个数字一定在该位置为1
+		if help[i] != 0 {
+			// 就用ans来 或 上所有位置为1，最后ans就是所求的那个出现k次的数字
+			ans |= 1 << i
+		}
+	}
+	return ans
+}
 ```
 
 # 03 单双链表、栈和队列、递归和Master公式、哈希表和有序表的使用和性能

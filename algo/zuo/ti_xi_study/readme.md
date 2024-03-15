@@ -114,7 +114,37 @@ func printOddTimesNum2(arr []int) {
 一个数组中有一种数出现K次，其他数都出现了M次，已知M > 1，K < M，找到出现了K次的数,要求额外空间复杂度O(1)，时间复杂度O(N)。
 - 扩展1：如果不存在出现K次的数，则返回-1。这怎么改呢，
 ```go
+func km(arr []int, k int, m int) int {
+	help := make([]int, 32)
+	// 统计数组中所有数据在0~31每个位置上面1的个数
+	for _, num := range arr {
+		for i := 0; i < 32; i++ {
+			help[i] += (num >> i) & 1
+		}
+	}
 
+	ans := 0
+	// 遍历刚才获得数组0~31的每个位置
+	for i := 0; i < 32; i++ {
+		// 扩展1：不存在则返回-1
+		//if help[i] % m == 0 {
+		//	continue
+		//}
+		//if help[i] % m == k {
+		//	ans |= 1 << i
+		//} else {
+		//	return -1
+		//}
+
+		help[i] %= m
+		// 如果该位置不能够被m整除，表明出现k次的那个数字一定在该位置为1
+		if help[i] != 0 {
+			// 就用ans来 或 上所有位置为1，最后ans就是所求的那个出现k次的数字
+			ans |= 1 << i
+		}
+	}
+	return ans
+}
 ```
 
 # 03 单双链表、栈和队列、递归和Master公式、哈希表和有序表的使用和性能
@@ -129,15 +159,91 @@ func printOddTimesNum2(arr []int) {
 
 **题目：**
 
-反转单链表、反转双链表
+反转单链表
+```go
+// 反转单链表
+/*
+在遍历列表时，将当前节点的 next 指针改为指向前一个元素。必须事先存储当前节点后面一个元素。不要忘记在最后返回新的头引用！
+*/
+func reverseLinkedList(head *Node) *Node {
+	var prev *Node
+	var next *Node
+	for head != nil {
+		// 保存下一个节点
+		next = head.next
+		// 当前节点的 next 指针指向前一个元素
+		head.next = prev
+		// 更新 prev 为当前节点
+		prev = head
+		// 更新当前节点为下一个节点
+		head = next
+	}
+	return prev
+}
+```
+
+反转双链表
+```go
+// 反转双向链表
+func reverseDoubleList(head *DoubleNode) *DoubleNode {
+	var prev *DoubleNode
+	var next *DoubleNode
+	for head != nil {
+		// 保存下一个节点
+		next = head.next
+		// 当前节点的 next 指针指向前一个元素
+		head.next = prev
+		// 当前节点的 prev 指针指向下一个元素
+		head.prev = next
+		// 更新 prev 为当前节点
+		prev = head
+		// 更新当前节点为下一个节点
+		head = next
+	}
+	return prev
+}
+```
 
 在链表中删除指定值的所有节点
+```go
+// 移除链表中等于给定值num的所有节点
+func removeValue(head *Node, num int) *Node {
+	// 找到第一个不需要删除的节点作为新的头节点
+	for head != nil && head.value == num {
+		head = head.next
+	}
+	// 初始化当前节点为新头节点
+	cur := head
+	var pre *Node // 初始化前一个节点
+	// 遍历链表
+	for cur != nil {
+		if cur.value == num {
+			// 如果当前节点需要删除，则将前一个节点的next指向当前节点的下一个节点
+			pre.next = cur.next
+		} else {
+			// 如果当前节点不需要删除，则更新前一个节点为当前节点
+			pre = cur
+		}
+		cur = cur.next // 移动当前节点
+	}
+	return head
+}
+```
 
 用双链表实现栈和队列
+```go
 
-用环形数组实现栈和队列
+```
+
+用环形数组实现栈(省略)和队列
+```go
+
+```
 
 实现有getMin功能的栈
+```go
+
+```
 
 两个栈实现队列
 
@@ -149,13 +255,12 @@ func printOddTimesNum2(arr []int) {
 
 
 
-04 归并排序及其常见面试题
-
-内容：
+# 04 归并排序及其常见面试题
+**内容：**
 
 归并排序
 
-题目：
+**题目：**
 
 归并排序的递归和非递归实现
 
@@ -184,9 +289,8 @@ func printOddTimesNum2(arr []int) {
 
 
 
-05 归并排序面试题(续)、快速排序
-
-内容：
+# 05 归并排序面试题(续)、快速排序
+**内容：**
 
 再来一个归并排序面试题
 
@@ -198,7 +302,7 @@ func printOddTimesNum2(arr []int) {
 
 快速排序3.0
 
-题目：
+**题目：**
 
 给定一个数组arr，两个整数lower和upper，
 返回arr中有多少个子数组的累加和在[lower,upper]范围上
@@ -214,9 +318,8 @@ code附加，双向链表进行快速排序的code实现
 
 
 
-06 比较器、堆结构、堆排序
-
-内容：
+# 06 比较器、堆结构、堆排序
+**内容：**
 
 比较器
 

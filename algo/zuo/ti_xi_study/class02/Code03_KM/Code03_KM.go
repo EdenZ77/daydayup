@@ -58,6 +58,16 @@ func km(arr []int, k int, m int) int {
 	ans := 0
 	// 遍历刚才获得数组0~31的每个位置
 	for i := 0; i < 32; i++ {
+		// 扩展1：不存在则返回-1
+		//if help[i] % m == 0 {
+		//	continue
+		//}
+		//if help[i] % m == k {
+		//	ans |= 1 << i
+		//} else {
+		//	return -1
+		//}
+
 		help[i] %= m
 		// 如果该位置不能够被m整除，表明出现k次的那个数字一定在该位置为1
 		if help[i] != 0 {

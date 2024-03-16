@@ -246,6 +246,9 @@ func removeValue(head *Node, num int) *Node {
 ```
 
 两个栈实现队列
+```go
+
+```
 
 两个队列实现栈
 

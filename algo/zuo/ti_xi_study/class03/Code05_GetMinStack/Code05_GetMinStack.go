@@ -5,6 +5,10 @@ import (
 	"fmt"
 )
 
+/*
+介绍了两种方式实现获取栈中最小值的方法
+*/
+
 type MyStack1 struct {
 	// 数据栈
 	stackData []int
@@ -26,6 +30,7 @@ func (s *MyStack1) Pop() (int, error) {
 	}
 	value := s.stackData[len(s.stackData)-1]
 	s.stackData = s.stackData[:len(s.stackData)-1]
+	// 如果弹出的数据等于最小值栈的栈顶元素，就将最小值栈的栈顶元素弹出
 	if value == s.GetMin() {
 		s.stackMin = s.stackMin[:len(s.stackMin)-1]
 	}

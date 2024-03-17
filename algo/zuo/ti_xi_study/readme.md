@@ -240,23 +240,250 @@ func removeValue(head *Node, num int) *Node {
 
 ```
 
-实现有getMin功能的栈
+实现有getMin功能的栈,要求时间复杂度为O(1),两种实现方式
 ```go
+type MyStack2 struct {
+	stackData []int
+	stackMin  []int
+}
 
+func (s *MyStack2) Push(newNum int) {
+	min := s.GetMin()
+	// 如果最小值栈为空或者新元素小于最小值栈的栈顶元素，就将新元素压入最小值栈
+	if len(s.stackMin) == 0 || newNum < min {
+		s.stackMin = append(s.stackMin, newNum)
+	} else {
+		// 否则将最小值栈的栈顶元素再次压入最小值栈
+		s.stackMin = append(s.stackMin, min)
+	}
+	s.stackData = append(s.stackData, newNum)
+}
+
+func (s *MyStack2) Pop() (int, error) {
+	if len(s.stackData) == 0 {
+		return 0, errors.New("your stack is empty")
+	}
+	// 弹出数据栈和最小值栈的栈顶元素
+	s.stackMin = s.stackMin[:len(s.stackMin)-1]
+	value := s.stackData[len(s.stackData)-1]
+	s.stackData = s.stackData[:len(s.stackData)-1]
+	return value, nil
+}
+
+// GetMin 获取最小值栈的栈顶元素
+func (s *MyStack2) GetMin() int {
+	if len(s.stackMin) == 0 {
+		panic("your stack is empty")
+	}
+	return s.stackMin[len(s.stackMin)-1]
+}
 ```
 
 两个栈实现队列
 ```go
+type TwoStacksQueue struct {
+	stackPush []int
+	stackPop  []int
+}
 
+func NewTwoStacksQueue() *TwoStacksQueue {
+	return &TwoStacksQueue{
+		stackPush: []int{},
+		stackPop:  []int{},
+	}
+}
+
+// 将 stackPush 中的数据倒入 stackPop
+func (queue *TwoStacksQueue) pushToPop() {
+	// Pop栈为空时才能倒入
+	if len(queue.stackPop) == 0 {
+		// 将Push栈中的数据倒入Pop栈
+		for len(queue.stackPush) > 0 {
+			value := queue.stackPush[len(queue.stackPush)-1]
+			queue.stackPush = queue.stackPush[:len(queue.stackPush)-1]
+			queue.stackPop = append(queue.stackPop, value)
+		}
+	}
+}
+
+// Add 添加元素
+func (queue *TwoStacksQueue) Add(value int) {
+	queue.stackPush = append(queue.stackPush, value)
+	// 添加元素后，判断是否需要将 stackPush 中的数据倒入 stackPop
+	queue.pushToPop()
+}
+
+// Poll 弹出元素
+func (queue *TwoStacksQueue) Poll() (int, error) {
+	if len(queue.stackPop) == 0 && len(queue.stackPush) == 0 {
+		return 0, errors.New("queue is empty")
+	}
+	// 只要两个栈任意一个不为空，就判断是否需要将 stackPush 中的数据倒入 stackPop
+	queue.pushToPop()
+	// 从 stackPop 中弹出元素
+	value := queue.stackPop[len(queue.stackPop)-1]
+	queue.stackPop = queue.stackPop[:len(queue.stackPop)-1]
+	return value, nil
+}
+
+// Peek 查看栈顶元素
+func (queue *TwoStacksQueue) Peek() (int, error) {
+	if len(queue.stackPop) == 0 && len(queue.stackPush) == 0 {
+		return 0, errors.New("queue is empty")
+	}
+	queue.pushToPop()
+	return queue.stackPop[len(queue.stackPop)-1], nil
+}
 ```
 
 两个队列实现栈
+```go
+type TwoQueueStack struct {
+	queue []int
+	help  []int
+}
+
+func NewTwoQueueStack() *TwoQueueStack {
+	return &TwoQueueStack{
+		queue: make([]int, 0),
+		help:  make([]int, 0),
+	}
+}
+
+// Push 添加元素
+func (s *TwoQueueStack) Push(value int) {
+	s.queue = append(s.queue, value)
+}
+
+// Poll 弹出元素
+func (s *TwoQueueStack) Poll() int {
+	if len(s.queue) == 0 {
+		panic("stack is empty")
+	}
+	// 将 queue 中的数据倒入 help, 直到 queue 中只剩一个元素
+	for len(s.queue) > 1 {
+		val := s.queue[0]
+		s.queue = s.queue[1:]
+		s.help = append(s.help, val)
+	}
+	// queue 中只剩一个元素，即为要弹出的元素
+	ans := s.queue[0]
+	// 重新赋值 queue 和 help
+	s.queue = s.help
+	s.help = []int{}
+	return ans
+}
+
+func (s *TwoQueueStack) Peek() int {
+	if len(s.queue) == 0 {
+		panic("stack is empty")
+	}
+	for len(s.queue) > 1 {
+		val := s.queue[0]
+		s.queue = s.queue[1:]
+		s.help = append(s.help, val)
+	}
+	ans := s.queue[0]
+	// 因为这里只是查看栈顶元素，所以需要将弹出的元素重新放回 queue 中
+	s.help = append(s.help, ans)
+	s.queue = s.help
+	s.help = []int{}
+	return ans
+}
+
+func (s *TwoQueueStack) IsEmpty() bool {
+	return len(s.queue) == 0
+}
+```
 
 用递归行为得到数组中的最大值，并用master公式来估计时间复杂度
+- Master公式用来较为简便地评估递归算法的时间复杂度
+- 注：使用Master公式分析递归问题时间复杂度时，各子问题的数据规模应该是一致的，否则不能使用Master公式。
 
 哈希表和有序表使用的code展示
+```java
+package class03;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.TreeMap;
+
+public class HashMapAndSortedMap {
+
+    public static class Node {
+        public int value;
+
+        public Node(int v) {
+            value = v;
+        }
+    }
+
+    public static class Zuo {
+        public int value;
+
+        public Zuo(int v) {
+            value = v;
+        }
+    }
+
+    public static void main(String[] args) {
+
+        HashMap<Integer, String> test = new HashMap<>();
+        Integer a = 19000000;
+        Integer b = 19000000;
+        System.out.println(a == b); // false,使用==比较的是地址
+
+        test.put(a, "我是3");
+        System.out.println(test.containsKey(b)); // true，使用equals比较的是值
+
+        Zuo z1 = new Zuo(1);
+        Zuo z2 = new Zuo(1);
+        HashMap<Zuo, String> test2 = new HashMap<>();
+        test2.put(z1, "我是z1");
+        System.out.println(test2.containsKey(z2)); // false，使用equals比较的是值
+
+        // UnSortedMap 哈希表，增、删、改、查，在使用时，O（1）
+        System.out.println("=====================");
 
 
+        // TreeMap 有序表：接口名
+        // 红黑树、avl、sb树、跳表
+        // O(logN)
+        System.out.println("有序表测试开始");
+        TreeMap<Integer, String> treeMap = new TreeMap<>();
+
+        treeMap.put(3, "我是3");
+        treeMap.put(4, "我是4");
+        treeMap.put(8, "我是8");
+        treeMap.put(5, "我是5");
+        treeMap.put(7, "我是7");
+        treeMap.put(1, "我是1");
+        treeMap.put(2, "我是2");
+
+        System.out.println(treeMap.containsKey(1)); // true
+        System.out.println(treeMap.containsKey(10)); // false
+
+        System.out.println(treeMap.get(4)); // 我是4
+        System.out.println(treeMap.get(10)); // null
+
+        treeMap.put(4, "他是4");
+        System.out.println(treeMap.get(4)); // 他是4
+
+        // treeMap.remove(4);
+        System.out.println(treeMap.get(4));
+
+        System.out.println("新鲜：=====================");
+
+        System.out.println(treeMap.firstKey()); // 返回最小的key
+        System.out.println(treeMap.lastKey());  // 返回最大的key
+        // <= 4
+        System.out.println(treeMap.floorKey(4)); // 返回小于等于4的最大的key
+        // >= 4
+        System.out.println(treeMap.ceilingKey(4)); // 返回大于等于4的最小的key
+        // O(logN)
+    }
+}
+```
 
 # 04 归并排序及其常见面试题
 **内容：**

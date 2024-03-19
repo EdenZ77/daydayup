@@ -66,7 +66,7 @@ func mergeSort2(arr []int) {
 		return
 	}
 	N := len(arr)
-	// 设置mergeSize为1，mergeSize表示每次合并的数组长度
+	// 设置mergeSize为1，mergeSize表示每次合并的数组长度。每次合并的结果都将被下次合并利用，所以时间复杂度为O(N*logN)
 	mergeSize := 1
 	for mergeSize < N {
 		// 当前左组的，第一个位置。每次步长改变后，都要从0开始

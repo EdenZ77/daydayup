@@ -25,25 +25,34 @@ func merge(arr []int, L, m, r int) int {
 	help := make([]int, r-L+1)
 	// 从右向左进行统计逆序对
 	i := len(help) - 1
+	// p1指向左组的最后一个数
 	p1 := m
+	// p2指向右组的最后一个数
 	p2 := r
 	res := 0
+	// 左右组都从右向左进行统计逆序对
 	for p1 >= L && p2 > m {
+		// 如果arr[p1] > arr[p2]，则右组的p2到m之间的数都比arr[p1]小
 		if arr[p1] > arr[p2] {
+			// 统计逆序对的个数
 			res += p2 - m
+			// 将arr[p1]放入help中，注意是从右向左放
 			help[i] = arr[p1]
 			p1--
 		} else {
+			// 如果arr[p1] <= arr[p2]，则将arr[p2]放入help中，注意是从右向左放
 			help[i] = arr[p2]
 			p2--
 		}
 		i--
 	}
+	// 以下两个循环只有一个会执行
 	for p1 >= L {
 		help[i] = arr[p1]
 		p1--
 		i--
 	}
+
 	for p2 > m {
 		help[i] = arr[p2]
 		p2--

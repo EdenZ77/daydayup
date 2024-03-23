@@ -12,7 +12,7 @@ func swap(arr []int, i, j int) {
 
 // arr[L..R]上，以arr[R]位置的数做划分值
 // <=X放左边  >X放右边，并且<=X区域的最后一个值等于X。
-// 思路就是，arr[R]作为划分值，处理arr[L..R-1]，然后将arr[R]放到>=X区域的第一个位置，这样就完成了划分。
+// 思路就是，arr[R]作为划分值，处理arr[L..R-1]，然后将arr[R]与>X区域的第一个位置交换，这样就完成了划分。返回<=X区域的右边界
 func partition(arr []int, L, R int) int {
 	if L > R {
 		return -1
@@ -20,16 +20,21 @@ func partition(arr []int, L, R int) int {
 	if L == R {
 		return L
 	}
-	lessEqual := L - 1
+	lessEqual := L - 1 // <= 区 右边界
 	index := L
+	// index 位置和 R 位置的数进行比较, index < R
 	for index < R {
+		// 当前位置的数 <= 划分值, index位置的数和 <= 区的下一个位置交换
 		if arr[index] <= arr[R] {
 			lessEqual++
 			swap(arr, index, lessEqual)
 		}
+		// 当前位置的数 > 划分值, index向前移动，<= 区不动
 		index++
 	}
+	// 将 <= 区的下一个位置和 R 位置的数交换
 	swap(arr, lessEqual+1, R)
+	// 返回 <= 区的右边界
 	return lessEqual + 1
 }
 
@@ -44,21 +49,29 @@ func netherlandsFlag(arr []int, L, R int) []int {
 		return []int{L, R}
 	}
 	less := L - 1 // < 区 右边界
-	more := R     // > 区 左边界
+	more := R     // > 区 左边界，为什么是R，因为R位置的数是划分值，
 	index := L
 	for index < more { // 当前位置，不能和 >区的左边界撞上
 		if arr[index] < arr[R] {
+			// < 区右边界的下一个位置和当前位置交换
+			swap(arr, less+1, index)
+			// < 区右边界向右移动
 			less++
-			swap(arr, index, less)
+			// 当前位置向右移动
 			index++
+			// 当前位置的数 == 划分值, index向前移动
 		} else if arr[index] == arr[R] {
 			index++
+			// 当前位置的数 > 划分值, 当前位置和 > 区的左边界的下一个位置交换
+			// 但是当前位置不能向前移动，因为交换过来的数还没有处理
 		} else {
 			more--
 			swap(arr, index, more)
 		}
 	}
+	// 将 > 区的左边界和 R 位置的数交换
 	swap(arr, more, R)
+	// 返回等于区域的左右边界
 	return []int{less + 1, more}
 }
 

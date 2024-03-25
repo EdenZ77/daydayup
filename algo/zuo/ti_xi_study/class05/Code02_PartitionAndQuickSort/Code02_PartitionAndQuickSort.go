@@ -118,6 +118,8 @@ func process3(arr []int, L, R int) {
 	if L >= R {
 		return
 	}
+	// 随机选择一个数和最后一个数交换，这样就不会出现最坏情况，时间复杂度就是O(N*logN)
+	//
 	rand.Seed(time.Now().UnixNano())
 	swap(arr, L+rand.Intn(R-L+1), R)
 	equalArea := netherlandsFlag(arr, L, R)

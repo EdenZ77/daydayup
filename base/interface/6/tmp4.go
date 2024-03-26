@@ -9,13 +9,11 @@ import (
 func main() {
 	err1 := errors.New("EOF")
 	err2 := errors.New("EOF")
-	println(err1)
-	println(err2)
-	println(io.EOF)
-	fmt.Println(err1 == io.EOF)
-	fmt.Println(err1 == err2)
-	fmt.Println(io.EOF == io.EOF)
-	//printNonEmptyInterface()
+
+	fmt.Println(err1 == io.EOF)   // false
+	fmt.Println(err1 == err2)     // false
+	fmt.Println(io.EOF == io.EOF) // true
+	printNonEmptyInterface()
 	//printNonEmptyInterface1()
 }
 

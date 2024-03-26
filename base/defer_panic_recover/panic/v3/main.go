@@ -13,15 +13,15 @@ func main() {
 
 func G() {
 	defer func() {
-		fmt.Println("c")
+		fmt.Println("G defer")
 	}()
 	F()
-	fmt.Println("继续执行")
+	fmt.Println("G 继续执行")
 }
 
 func F() {
 	defer func() {
-		fmt.Println("b")
+		fmt.Println("F defer")
 	}()
-	panic("a")
+	panic("F panic")
 }

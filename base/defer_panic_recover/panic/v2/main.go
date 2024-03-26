@@ -9,20 +9,29 @@ func main() {
 	G()
 	fmt.Println("main")
 }
+
+// 输出：
+//F start
+//F defer
+//G 捕获异常: F a
+//G defer
+//main
+
 func G() {
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Println("捕获异常:", err)
+			fmt.Println("G 捕获异常:", err)
 		}
-		fmt.Println("c")
+		fmt.Println("G defer")
 	}()
 	F()
-	fmt.Println("继续执行")
+	fmt.Println("G 继续执行")
 }
 
 func F() {
+	fmt.Println("F start")
 	defer func() {
-		fmt.Println("b")
+		fmt.Println("F defer")
 	}()
-	panic("a")
+	panic("F a")
 }

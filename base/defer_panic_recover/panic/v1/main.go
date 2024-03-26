@@ -12,20 +12,31 @@ func main() {
 	fmt.Println("main")
 }
 
+// 输出：
+//F start
+//F 捕获异常: a
+//F defer
+//继续执行
+//G defer
+//main
+
 func G() {
 	defer func() {
-		fmt.Println("c")
+		fmt.Println("G defer")
 	}()
 	F()
 	fmt.Println("继续执行")
 }
 
 func F() {
+	fmt.Println("F start")
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Println("捕获异常:", err)
+			fmt.Println("F 捕获异常:", err)
 		}
-		fmt.Println("b")
+		fmt.Println("F defer")
 	}()
 	panic("a")
+	// 不会执行
+	// fmt.Println("F end")
 }

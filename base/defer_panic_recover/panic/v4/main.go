@@ -14,23 +14,36 @@ func main() {
 	fmt.Println("main")
 }
 
+// 输出：
+//F defer
+//panic: F panic
+//
+//goroutine 6 [running]:
+//main.F()
+//D:/workspace/go_project/study/daydayup/base/defer_panic_recover/panic/v4/main.go:36 +0x49
+//created by main.G
+//D:/workspace/go_project/study/daydayup/base/defer_panic_recover/panic/v4/main.go:26 +0x46
+//
+//Process finished with the exit code 2
+
 func G() {
 	defer func() {
-		//goroutine外进行recover
+		// goroutine外进行recover
 		if err := recover(); err != nil {
-			fmt.Println("捕获异常:", err)
+			fmt.Println("G 捕获异常:", err)
 		}
-		fmt.Println("c")
+		fmt.Println("G defer")
 	}()
-	//创建goroutine调用F函数
+	// 创建goroutine调用F函数
 	go F()
 	time.Sleep(time.Second)
+	fmt.Println("G 继续执行")
 }
 
 func F() {
 	defer func() {
-		fmt.Println("b")
+		fmt.Println("F defer")
 	}()
 	//goroutine内部抛出panic
-	panic("a")
+	panic("F panic")
 }

@@ -21,4 +21,5 @@ func main() {
 
 	fmt.Println(reflect.TypeOf(p)) // *unit
 	fmt.Println(*p)                //13
+
 }

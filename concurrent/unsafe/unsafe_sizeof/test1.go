@@ -5,6 +5,12 @@ import (
 	"unsafe"
 )
 
+/*
+参考资料：https://geektutu.com/post/hpg-struct-alignment.html
+
+
+*/
+
 type Args struct {
 	num1 int
 	num2 int
@@ -58,6 +64,18 @@ func main() {
 	fmt.Println(unsafe.Sizeof(make([]Person, 10, 10)))  // 24
 	fmt.Println(unsafe.Alignof(make([]Person, 10, 10))) // 8
 	fmt.Println(unsafe.Sizeof([]int32{}))               // 24
+
+	fmt.Println("==============")
+	var a [10]int32
+	var b [10]struct {
+		c int16
+		d int8
+	}
+
+	fmt.Println("Alignment of array a:", unsafe.Alignof(a))              // 数组a的对齐倍数 4
+	fmt.Println("Alignment of array b:", unsafe.Alignof(b))              // 数组b的对齐倍数 2
+	fmt.Println("Alignment of int32:", unsafe.Alignof(a[0]))             // int32的对齐倍数 4
+	fmt.Println("Alignment of struct in array b:", unsafe.Alignof(b[0])) // 数组b中结构体的对齐倍数 2
 }
 
 type Person struct {

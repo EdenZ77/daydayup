@@ -86,10 +86,13 @@ func maxCover2(lines [][]int) int {
 	maxCover := 0
 
 	for _, line := range lineObjects {
+		// 弹出所有小于等于当前线段起始点的线段结束点
 		for minHeap.Len() > 0 && (*minHeap)[0] <= line.start {
 			heap.Pop(minHeap)
 		}
+		// 将当前线段的结束点加入小根堆
 		heap.Push(minHeap, line.end)
+		// 更新最大覆盖线段数
 		if minHeap.Len() > maxCover {
 			maxCover = minHeap.Len()
 		}

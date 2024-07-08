@@ -1,25 +1,28 @@
 package main
 
-import "fmt"
-
-type student struct {
-	name string
-	age  int
+type T struct {
+	a int
 }
 
-// 指针切片语法糖的运用，以及for循环中变量本质
-func main() {
-	m := make(map[string]*student)
-	stus := []*student{
-		{"小王子", 18},
-		{"小王子2", 23},
-		{"小王子3", 26},
-	}
+func (t T) M1() {
+	t.a = 10
+}
 
-	for _, stu := range stus {
-		m[stu.name] = stu
-	}
-	for k, v := range m {
-		fmt.Println(k, "=>", v.name)
-	}
+func (t *T) M2() {
+	t.a = 11
+}
+
+func main() {
+	var t T
+	println(t.a) // 0
+
+	t.M1()
+	println(t.a) // 0
+
+	//p := &t
+	//p.M2()
+	//println(t.a) // 11
+
+	t.M2()
+	println(t.a) // 11
 }

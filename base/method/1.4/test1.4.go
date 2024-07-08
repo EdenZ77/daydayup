@@ -12,7 +12,9 @@ type Interface interface {
 	M2()
 }
 
-type T struct{}
+type T struct {
+	Interface
+}
 
 //func (t T) M1() {
 //	fmt.Println("Im T struct T M1 method")
@@ -26,9 +28,17 @@ func (t T) M3() {
 }
 
 func main() {
-	//var t T
-	//var pt *T
+	var t T
+	var pt *T
 	//var i Interface
+
+	t.M1()
+	t.M2()
+	t.M3()
+
+	pt.M1()
+	pt.M2()
+	pt.M3()
 
 	//i = pt
 	//i = t // cannot use t (type T) as type Interface in assignment: T does not implement Interface (M2 method has pointer receiver)

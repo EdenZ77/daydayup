@@ -53,6 +53,14 @@ func authHandler(h http.Handler) http.Handler {
 	})
 }
 
+/*
+log_2 =========before
+log_1 =========before
+authHandler before=======
+authHandler after=========
+log_1 =========after
+log_2 =========after
+*/
 func main() {
 	http.ListenAndServe(":8080", logHandler2(logHandler1(authHandler(http.HandlerFunc(greetings)))))
 }

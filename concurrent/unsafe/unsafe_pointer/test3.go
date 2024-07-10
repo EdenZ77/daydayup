@@ -24,8 +24,8 @@ func main() {
 	v.PutI()
 	v.PutJ()
 	fmt.Println("===============")
-	//testSlice()
-	slice2arrayWithHack()
+	testSlice()
+	//slice2arrayWithHack()
 }
 
 //var i *int32 = (*int32)(unsafe.Pointer(v))
@@ -33,13 +33,25 @@ func main() {
 // 刚才说了v的地址其实就是它的第一个成员的地址，所以这个i就很显然指向了v的成员i，
 // 通过给i赋值就相当于给v.i赋值了，但是别忘了i只是个指针，要赋值得解引用。
 
+/*
+func Slice(ptr *ArbitraryType, len IntegerType) []ArbitraryType
+这个函数的主要作用是基于一个指针 ptr 和一个长度 len 创建一个切片。以下是它的详细解释：
+ptr: 指向底层数组的起始地址。
+len: 切片的长度，必须是一个整数类型或者未命名的常量。
+
+效果等效于：(*[len]ArbitraryType)(unsafe.Pointer(ptr))[:]
+这段代码的含义是：
+将 ptr 转换为一个指向 [len]ArbitraryType 数组的指针。
+使用切片操作符 [:] 将这个数组转换为一个切片。
+特殊情况： 如果 ptr 是 nil 并且 len 是零，Slice 函数返回 nil。这种行为在某些情况下是有用的，例如当你想要创建一个空切片而无须分配内存时。
+*/
 func testSlice() {
 	a := [3]int{2, 3, 4}
 	//a := []int{3, 4, 5}
 	slice := unsafe.Slice(&a[0], 3)
 	fmt.Println(slice)
-	fmt.Println(len(slice))
-	fmt.Println(cap(slice))
+	fmt.Println(len(slice)) // 3
+	fmt.Println(cap(slice)) // 3
 }
 
 func slice2arrayWithHack() {

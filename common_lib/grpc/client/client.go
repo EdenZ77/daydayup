@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"google.golang.org/grpc/credentials/insecure"
-	pb "hello/grpc/pbb"
+	"hello/common_lib/grpc/pbb"
 	"time"
 
 	"google.golang.org/grpc"
@@ -18,11 +18,11 @@ func main() {
 	}
 	defer conn.Close()
 
-	c := pb.NewGreeterClient(conn)
+	c := pbb.NewGreeterClient(conn)
 	// 调用服务端的SayHello
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	r, err := c.SayHello(ctx, &pb.HelloRequest{Name: "q1mi"})
+	r, err := c.SayHello(ctx, &pbb.HelloRequest{Name: "q1mi"})
 	if err != nil {
 		fmt.Printf("could not greet: %v", err)
 	}

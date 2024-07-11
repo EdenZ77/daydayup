@@ -3,19 +3,18 @@ package main
 import (
 	"context"
 	"fmt"
-	pb "hello/grpc/pbb"
-
+	"hello/common_lib/grpc/pbb"
 	"net"
 
 	"google.golang.org/grpc"
 )
 
 type server struct {
-	pb.UnimplementedGreeterServer
+	pbb.UnimplementedGreeterServer
 }
 
-func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
-	return &pb.HelloReply{Message: "Hello " + in.Name}, nil
+func (s *server) SayHello(ctx context.Context, in *pbb.HelloRequest) (*pbb.HelloReply, error) {
+	return &pbb.HelloReply{Message: "Hello " + in.Name}, nil
 }
 
 func main() {
@@ -25,8 +24,8 @@ func main() {
 		fmt.Printf("failed to listen: %v", err)
 		return
 	}
-	s := grpc.NewServer()                  // 创建gRPC服务器
-	pb.RegisterGreeterServer(s, &server{}) // 在gRPC服务端注册服务
+	s := grpc.NewServer()                   // 创建gRPC服务器
+	pbb.RegisterGreeterServer(s, &server{}) // 在gRPC服务端注册服务
 
 	//reflection.Register(s) //在给定的gRPC服务器上注册服务器反射服务
 

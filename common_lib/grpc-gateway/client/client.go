@@ -3,9 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
-	pb "hello/grpc-gateway/gen/go/protobuf/admin/v1"
-
 	"google.golang.org/grpc"
+	"hello/common_lib/grpc-gateway/gen/go/protobuf/admin/v1"
 )
 
 func main() {
@@ -16,9 +15,9 @@ func main() {
 	}
 	defer conn.Close()
 
-	c := pb.NewGreeterClient(conn)
+	c := servicev1.NewGreeterClient(conn)
 	// 调用服务端的SayHello
-	r, err := c.SayHello(context.Background(), &pb.HelloRequest{Name: "q1mi"})
+	r, err := c.SayHello(context.Background(), &servicev1.HelloRequest{Name: "q1mi"})
 	if err != nil {
 		fmt.Printf("could not greet: %v", err)
 	}

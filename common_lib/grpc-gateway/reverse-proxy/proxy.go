@@ -3,14 +3,13 @@ package main
 import (
 	"context"
 	"flag"
+	gw "hello/common_lib/grpc-gateway/gen/go/protobuf/admin/v1"
 	"net/http"
 
 	"github.com/golang/glog"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-
-	gw "hello/grpc-gateway/gen/go/protobuf/admin/v1" // Update
 )
 
 var (

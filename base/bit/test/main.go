@@ -65,3 +65,24 @@ func main() {
 	fmt.Printf("%b\n", ability)           // 100
 	fmt.Println((ability & Like) == Like) // false
 }
+
+/*
+负数以补码形式表示
+123 (decimal) = 01111011 (binary)
+-123 (decimal) = 10000101 (binary, 8-bit two's complement)
+
+<<：左移操作，将二进制数向左移动，右边补0。
+>>：右移操作，通常是算术右移（Arithmetic Right Shift），保留符号位，左边补符号位。
+>>> 表示逻辑右移（Logical Right Shift），左边补0。
+
+
+01111011 << 1 = 11110110 (binary)
+10000101 << 1 = 00001010 (binary, ignoring sign extension)
+
+01111011 >> 1 = 00111101 (binary)
+10000101 >> 1 = 11000010 (binary, sign extension)
+
+01111011 >>> 1 = 00111101 (binary)
+10000101 >>> 1 = 01000010 (binary, ignoring sign extension)
+
+*/

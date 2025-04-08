@@ -1,0 +1,156 @@
+version: "3.3"
+x-slabVersion: "1.0.0"
+services:
+  redis:
+    image: 172.30.3.150/gc-app/redis:5.0.7
+    restart: always
+    network_mode: "service:slab-mgr"
+    volumes:
+      - /var/skyguard/redis/data:/opt/data
+      - /var/log/skyguard/redis/:/opt/log
+    healthcheck:
+      test: nc -z localhost 6379
+      interval: 30s
+      timeout: 10s
+      retries: 3
+  pgsql:
+    image: 172.30.3.150/common/postgres:14.3
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: cluster_api
+    networks:
+      internal:
+        ipv4_address: 169.254.253.4
+    volumes:
+      - /var/skyguard/pgsql/data:/opt/data
+      - /var/log/skyguard/pgsql/:/opt/log
+      - /opt/skyguard/gatorcloud/data:/var/lib/postgresql/data
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+  kvserver:
+    image: 172.30.3.150/gc-app/kvserver:3.10.0_003
+    depends_on:
+      - redis
+    restart: always
+    network_mode: "service:slab-mgr"
+    privileged: true
+    environment:
+      - DEVICE=ucss
+    volumes:
+      - /etc/appliance/:/opt/skyguard/www/app:ro
+      - /var/skyguard/sps:/var/skyguard/sps:shared
+      - /opt/skyguard/ucs/var/:/opt/skyguard/ucs/var/:shared
+      - /opt/skyguard/ucs/tmp/:/opt/skyguard/ucs/tmp/:shared
+      - /var/skyguard/cluster/:/var/skyguard/cluster/:shared
+      - /opt/skyguard/download:/opt/skyguard/download
+      - /var/log/cores/:/var/log/cores/
+  capi:
+    image: 172.30.3.150/gc-app/capi-full:3.10.0_001
+    depends_on:
+      - redis
+    restart: always
+    network_mode: "service:slab-mgr"
+    privileged: true
+    environment:
+      - DEVICE=ucss
+    volumes:
+      - /etc/hostname:/etc/hostname.host:ro
+      - /etc/appliance:/opt/skyguard/www/app:ro
+      - /var/skyguard/sps:/var/skyguard/sps:shared
+      - /var/skyguard/cluster:/var/skyguard/cluster:shared
+      - /opt/skyguard/download:/opt/skyguard/download
+      - /opt/skyguard/cp_client.xml:/opt/skyguard/cpservice/etc/cp_client.xml
+  ats-auth:
+    image: 172.30.3.150/gc-app/ats-auth:3.10.0_035
+    depends_on:
+      - redis
+    restart: always
+    hostname: HOSTNAME
+    ports:
+      - 8099:8099
+      - 9444:9444
+    networks:
+      internal:
+        ipv4_address: 169.254.253.10
+    privileged: true
+    volumes:
+      - /etc/hostname:/etc/hostname.host:ro
+      - /opt/skyguard/gatorcloud:/opt/skyguard/gatorcloud:ro
+      - /var/log/trafficserver:/var/log/trafficserver
+      - /var/cache/trafficserver:/var/cache/trafficserver
+  fpdb:
+    image: 172.30.3.150/gc-app/spe-fpdb:3.10.0_081
+    restart: always
+    networks:
+      internal:
+        ipv4_address: 169.254.253.6
+    privileged: true
+    volumes:
+      - /opt/skyguard/ucs/var/:/opt/skyguard/ucs/var/:shared
+      - /opt/skyguard/gatorcloud:/opt/skyguard/gatorcloud:ro
+  dsa:
+    image: 172.30.3.150/gc-app/spe-dsa:3.10.0_081
+    restart: always
+    environment:
+      POP_TYPE: SLAB
+    depends_on:
+      - fpdb
+    networks:
+      internal:
+        ipv4_address: 169.254.253.8
+    privileged: true
+    volumes:
+      - /opt/skyguard/ucs/var/:/opt/skyguard/ucs/var/:shared
+      - /opt/skyguard/ucs/tmp/:/opt/skyguard/ucs/tmp/:shared
+      - /opt/skyguard/gatorcloud:/opt/skyguard/gatorcloud:ro
+      - /var/skyguard/cluster/:/var/skyguard/cluster/:shared
+  appliance:
+    image: 172.30.3.150/gc-app/app:3.10.0_027
+    restart: always
+    ports:
+      - 8443:8443
+    privileged: true
+    volumes:
+      - /opt/skyguard/gatorcloud:/opt/skyguard/gatorcloud:ro
+    networks:
+      internal:
+        ipv4_address: 169.254.253.7
+  cae:
+    image: 172.30.3.150/gc-app/spe-cae:3.10.0_081
+    restart: always
+    environment:
+      POP_TYPE: SLAB
+    networks:
+      internal:
+        ipv4_address: 169.254.253.9
+    depends_on:
+      - kvserver
+    privileged: true
+    volumes:
+      - /opt/skyguard/ucs/var/:/opt/skyguard/ucs/var/:shared
+      - /opt/skyguard/ucs/tmp/:/opt/skyguard/ucs/tmp/:shared
+      - /opt/skyguard/gatorcloud:/opt/skyguard/gatorcloud:ro
+  ocr:
+    image: 172.30.3.150/gc-app/spe-ocr:3.10.0_081
+    restart: always
+    networks:
+      internal:
+        ipv4_address: 169.254.253.3
+    privileged: true
+  slab-mgr:
+    image: 172.30.3.150/gc-cloud/slab-frpc-mgr:latest
+    restart: always
+    ports:
+      - 8000:8000
+    networks:
+      internal:
+        ipv4_address: 169.254.253.2
+    privileged: true
+    volumes:
+      - /opt/skyguard/gatorcloud:/opt/skyguard/gatorcloud
+      - /opt/skyguard/compose/docker-compose.yml:/opt/skyguard/compose/docker-compose.yml
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/os-release:/etc/os-release
+networks:
+  internal:
+    external: true

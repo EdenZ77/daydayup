@@ -12,7 +12,9 @@ func main() {
 	//dn := "CN=web-server,OU=Web,OU=Servers,OU=Resources,DC=corp,DC=local"
 	//dn := "CN=printer1,OU=Printers,DC=office,DC=internal,DC=com"
 	//dn := "CN=user1,OU=Sales,OU=Departments,DC=na,DC=global,DC=company,DC=org"
-	dn := "CN=admin,DC=admin,DC=local"
+	//dn := "CN=admin,DC=admin,DC=local"
+	//dn := "CN=zhytest-ad,CN=Users,DC=swg-ad,DC=gatorcloud,DC=skyguardmis,DC=com"
+	dn := "OU=Domain Controllers,DC=gendom,DC=com"
 	// 构建所有可能的上级 OU 和 DC 组合
 	dns := buildDNCombinations(dn)
 

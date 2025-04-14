@@ -16,9 +16,9 @@ type capitalizedReader struct {
 }
 
 func (r *capitalizedReader) Read(p []byte) (int, error) {
-	fmt.Println("CapReader=====before")
+	fmt.Println("CapReader===in==before")
 	n, err := r.r.Read(p)
-	fmt.Println("CapReader=====after")
+	fmt.Println("CapReader===in==after")
 	if err != nil {
 		return 0, err
 	}
@@ -52,6 +52,7 @@ type LimitedReaderX struct {
 }
 
 func (l *LimitedReaderX) Read(p []byte) (n int, err error) {
+	// 根据当前包装器的功能，可在处理内部接口业务前面或者后面增加包装功能
 	if l.N <= 0 {
 		return 0, io.EOF
 	}

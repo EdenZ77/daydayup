@@ -1,85 +1,27 @@
 package main
 
-import (
-	"bufio"
-	"encoding/json"
-	"fmt"
-	"os"
-)
+import "fmt"
 
-type ResponseStatus struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
+// 定义一个接受函数作为参数的函数
+func process(num int, callback func(int)) {
+	fmt.Println("Processing number:", num)
+	callback(num * 2) // 调用传入的函数
 }
 
-type Reputation struct {
-	Category  string   `json:"category"`
-	Score     float32  `json:"score"`
-	Tag       []string `json:"tag"`
-	Timestamp string   `json:"timestamp"`
-	SourceRef []string `json:"source_ref"`
-}
-
-type Label struct {
-	Type       string        `json:"type"`
-	Value      string        `json:"value"`
-	Geo        string        `json:"geo"`
-	Reputation []*Reputation `json:"reputation"`
-}
-
-type DataItem struct {
-	Type           string   `json:"type"`
-	Id             string   `json:"id"`
-	Title          string   `json:"title"`
-	CreatedBy      string   `json:"created_by"`
-	CreatedTime    string   `json:"created_time"`
-	ModifiedBy     string   `json:"modified_by"`
-	ModifiedTime   string   `json:"modified_time"`
-	Pattern        string   `json:"pattern"`
-	StartTime      string   `json:"start_time"`
-	EndTime        string   `json:"end_time"`
-	SuggestedOfCoa string   `json:"suggested_of_coa"`
-	Labels         []*Label `json:"labels"`
-}
-
-type IocsResponse struct {
-	ResponseStatus *ResponseStatus `json:"response_status"`
-	NextPage       string          `json:"nextpage"`
-	ResponseData   []*DataItem     `json:"response_data"`
+func out(result int) {
+	fmt.Println("The out result is:", result)
 }
 
 func main() {
+	// 定义一个匿名函数作为回调
+	//doublePrint := func(result int) {
+	//	fmt.Println("The result is:", result)
+	//}
 
-	f, err := os.Open("C:\\Users\\zhuqiqi\\Desktop\\XXS\\iocs.json")
-	//f, err := os.Open("C:\\Users\\zhuqiqi\\Desktop\\XXS\\test.json")
-	if err != nil {
-		fmt.Printf("Error: %s\n", err)
-		return
-	}
-	defer f.Close()
+	process(5, out)
 
-	scanner := bufio.NewScanner(f)
-	buf := make([]byte, 0, 5*1024*1024)
-	scanner.Buffer(buf, 5*1024*1024)
-	for scanner.Scan() {
-		var resp IocsResponse
-		err = json.Unmarshal([]byte(scanner.Text()), &resp)
-		if err != nil {
-			fmt.Printf("Unmarshal error=== %+v", err)
-			return
-		}
-		fmt.Println(resp.NextPage)
-		fmt.Println("原始文本====")
-		//fmt.Println(scanner.Text())
-		//b, err2 := json.Marshal(resp)
-		//if err2 != nil {
-		//	return
-		//}
-		//fmt.Println("序列化====")
-		//fmt.Println(string(b))
-	}
-	if scanner.Err() != nil {
-		fmt.Printf("err: %+v", scanner.Err())
-	}
-
+	// 也可以直接传入匿名函数
+	process(10, func(x int) {
+		fmt.Println("Direct callback with result:", x)
+	})
 }

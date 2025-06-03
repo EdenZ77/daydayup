@@ -26,7 +26,7 @@ func main() {
 	}()
 
 	var wg sync.WaitGroup
-	// 消费任务，当任务生产完毕，退出for循环
+	// 消费任务，当任务消费完毕，退出for循环
 	for job := range jobs {
 		// 每个任务启动一个goroutine
 		go func(j int) {

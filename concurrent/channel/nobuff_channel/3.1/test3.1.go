@@ -11,7 +11,7 @@ type signal struct{}
 
 func worker() {
 	println("worker is working...")
-	time.Sleep(1 * time.Second)
+	time.Sleep(5 * time.Second)
 }
 
 func spawn(f func()) <-chan signal {

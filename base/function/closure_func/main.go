@@ -8,16 +8,16 @@ import (
 // 闭包既可以通过函数参数使用外部函数变量，也可以直接使用，两者有什么区别呢？
 func main() {
 	// case 1 打印：i = 2 说明闭包内捕获外部函数变量是取的地址,而不是调用闭包时刻的参数值*******************非常重要的结论
-	i := 1
-
-	go func() {
-		fmt.Println("before i=", i) // before i= 1
-		time.Sleep(2000 * time.Millisecond)
-		fmt.Println("after i =", i) // after i = 2
-	}()
-	time.Sleep(1000 * time.Millisecond)
-	i = 2
-	time.Sleep(5000 * time.Millisecond)
+	//i := 1
+	//
+	//go func() {
+	//	fmt.Println("before i=", i) // before i= ？
+	//	time.Sleep(2000 * time.Millisecond)
+	//	fmt.Println("after i =", i) // after i = ？
+	//}()
+	//time.Sleep(1000 * time.Millisecond)
+	//i = 2
+	//time.Sleep(5000 * time.Millisecond)
 
 	// case 1.1
 	//strArr := []string{"11", "22", "33"}
@@ -50,12 +50,12 @@ func main() {
 	// 但是像 string、切片、map 这些类型就不是了，它们的内存表示对应的是它们数据内容的“描述符”。
 	// 当这些类型作为实参类型时，值传递拷贝的也是它们数据内容的“描述符”，不包括数据内容本身，所以这些类型传递的开销是固定的，与数据内容大小无关。
 	// 这种只拷贝“描述符”，不拷贝实际数据内容的拷贝过程，也被称为“浅拷贝”。
-	//i := 1
-	//go func(i int) {
-	//	time.Sleep(100 * time.Millisecond)
-	//	fmt.Println("i =", i)
-	//}(i) // 通过匿名函数参数将值传入闭包
-	//
-	//i++
-	//time.Sleep(1000 * time.Millisecond)
+	i := 1
+	go func(i int) {
+		time.Sleep(500 * time.Millisecond)
+		fmt.Println("i =", i) // 输出为：i = 1
+	}(i) // 通过匿名函数参数将值传入闭包
+
+	i++
+	time.Sleep(1000 * time.Millisecond)
 }

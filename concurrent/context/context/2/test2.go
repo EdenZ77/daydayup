@@ -28,16 +28,16 @@ func HttpHandler() {
 }
 
 func deal(ctx context.Context) {
-	ctx, cancelFunc := context.WithTimeout(ctx, 10*time.Second)
+	ctx1, cancelFunc := context.WithTimeout(ctx, 10*time.Second)
 	defer cancelFunc()
 	for i := 0; i < 10; i++ {
 		time.Sleep(1 * time.Second)
 		select {
 		// 超时时间由这个ctx到根节点路径上超时时间最短的ctx决定，子节点cancel不影响父节点
-		case <-ctx.Done():
+		case <-ctx1.Done():
 			fmt.Println("case ======")
-			fmt.Println(ctx.Err())      // context deadline exceeded
-			fmt.Println(ctx.Deadline()) // 2023-05-13 10:38:09.2290093 +0800 CST m=+3.003439401 true 这语句循环输出都是一样的
+			fmt.Println(ctx1.Err())      // context deadline exceeded
+			fmt.Println(ctx1.Deadline()) // 2023-05-13 10:38:09.2290093 +0800 CST m=+3.003439401 true 这语句循环输出都是一样的
 			//return
 		default:
 			fmt.Printf("deal time is %d\n", i)

@@ -6,47 +6,35 @@ import (
 	"time"
 )
 
-func main() {
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-	go goTest(ctx)
-	//time.Sleep(4 * time.Second)
-	//for range time.Tick(time.Second) {
-	//	select {
-	//	case <-ctx.Done():
-	//		fmt.Println("收到来自子节点的超时信号")
-	//		break
-	//	default:
-	//		fmt.Println("default")
-	//	}
-	//}
-
-	//cancel()
-	time.Sleep(12 * time.Second)
-	fmt.Println("main over ====")
-}
-
-func goTest(ctx context.Context) {
-	withCancel, cancelFunc := context.WithCancel(ctx)
-	// 这里调用了cancel，导致go Speak的ctx被cancel
-	defer cancelFunc()
-	go Speak(withCancel)
-	fmt.Println("goTest goroutine over =========")
-}
-
-func Speak(ctx context.Context) {
-	fmt.Println("Speak =======")
-	timeout, cancelFunc := context.WithTimeout(ctx, 7*time.Second)
-	defer cancelFunc()
-	//time.Sleep(3 * time.Second)
-	//cancelFunc()
-	for range time.Tick(time.Second) {
+// 模拟长时间运行的任务
+func worker(ctx context.Context, id int) {
+	for {
 		select {
-		case <-timeout.Done():
-			fmt.Println("我要闭嘴了")
+		case <-ctx.Done(): // 监听取消信号
+			fmt.Printf("Worker %d: 收到取消信号，原因: %v\n", id, ctx.Err())
 			return
 		default:
-			fmt.Println("balabalabalabala")
+			fmt.Printf("Worker %d: 正在处理任务...\n", id)
+			time.Sleep(500 * time.Millisecond) // 模拟工作
 		}
 	}
+}
+
+func main() {
+	// 创建可取消的Context
+	ctx, cancel := context.WithCancel(context.Background())
+
+	// 启动3个worker
+	for i := 1; i <= 3; i++ {
+		go worker(ctx, i)
+	}
+
+	// 模拟运行一段时间后取消
+	time.Sleep(2 * time.Second)
+	fmt.Println("\n主程序: 发送取消信号...")
+	cancel() // 触发取消操作
+
+	// 给worker一些时间响应
+	time.Sleep(500 * time.Millisecond)
+	fmt.Println("主程序: 退出")
 }

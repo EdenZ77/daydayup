@@ -23,7 +23,7 @@ func gen(ctx context.Context) <-chan int {
 func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel() // 当我们取完需要的整数后调用cancel
-	ctx.Value()
+	//ctx.Value()
 	for n := range gen(ctx) {
 		fmt.Println(n)
 		if n == 5 {

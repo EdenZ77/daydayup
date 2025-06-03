@@ -18,6 +18,7 @@ LOOP:
 		time.Sleep(time.Millisecond * 10) // 假设正常连接数据库耗时10毫秒
 		select {
 		case <-ctx.Done(): // 50毫秒后自动调用
+			fmt.Println("<-ctx.Done()被调用")
 			fmt.Println(ctx.Err()) // context deadline exceeded
 			break LOOP
 		default:
@@ -33,7 +34,6 @@ func main() {
 	defer cancel() // 通知子goroutine结束
 	wg.Add(1)
 	go worker(ctx)
-	time.Sleep(time.Second * 5)
 	wg.Wait()
 	fmt.Println("over")
 }

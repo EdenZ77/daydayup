@@ -226,17 +226,27 @@ func demoTaskScheduler() {
 		*/
 		processingTime := time.Duration(rand.Intn(1500)+500) * time.Millisecond
 
+		// 真实任务启动（在实际中，这可能是数据库查询或API调用）
+		resultCh := make(chan string, 1)
+		go func() {
+			// 模拟实际工作耗时
+			time.Sleep(processingTime)
+			resultCh <- "任务结果"
+		}()
+
 		select {
-		case <-time.After(processingTime):
+		case res := <-resultCh:
 			if errors.Is(taskCtx.Err(), context.DeadlineExceeded) {
-				fmt.Printf("🔴 [超时完成] %-15s 耗时: %v\n", task.Name, processingTime)
+				fmt.Printf("🔴 [超时完成] %-15s 耗时: %v (结果: %s)\n",
+					task.Name, processingTime, res)
 			} else {
-				fmt.Printf("🟢 [按时完成] %-15s 耗时: %v\n", task.Name, processingTime)
+				fmt.Printf("🟢 [按时完成] %-15s 耗时: %v (结果: %s)\n",
+					task.Name, processingTime, res)
 			}
 		case <-taskCtx.Done():
 			if errors.Is(taskCtx.Err(), context.DeadlineExceeded) {
-				fmt.Printf("🔴 [超时取消] %-15s 已完成: %v\n",
-					task.Name, processingTime.Round(10*time.Millisecond))
+				fmt.Printf("🔴 [超时取消] %-15s 耗时: %v\n",
+					task.Name, processingTime)
 			} else {
 				fmt.Printf("🔵 [手动取消] %-15s 原因: %v\n",
 					task.Name, taskCtx.Err())

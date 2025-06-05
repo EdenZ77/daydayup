@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// 定义自定义键类型
+// 定义自定义键类型（避免键冲突的最佳实践）
 type contextKey string
 
 const (
@@ -26,6 +26,7 @@ type User struct {
 // 模拟中间件：设置请求ID和TraceID
 func middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// 创建初始上下文
 		ctx := r.Context()
 
 		// 生成唯一请求ID

@@ -46,6 +46,7 @@ func fetchWithTimeout(ctx context.Context, url string) (string, error) {
 	client := http.DefaultClient
 	resp, err := client.Do(req)
 	if err != nil {
+		fmt.Println("Do err")
 		return "", err
 	}
 	defer resp.Body.Close()
@@ -116,7 +117,7 @@ func main() {
 	// 示例3: HTTP请求超时
 	fmt.Println("\n=== 示例3: HTTP请求超时 ===")
 	// 将500毫秒改为5000毫秒，这个接口就可以正常调通啦
-	ctx3, cancel3 := context.WithTimeout(context.Background(), 500*time.Millisecond)
+	ctx3, cancel3 := context.WithTimeout(context.Background(), 800*time.Millisecond)
 	defer cancel3()
 
 	// 注意: 这个URL实际会超时，因为设置的超时时间很短

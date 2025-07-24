@@ -46,8 +46,12 @@ identical expressions on the left and right side of the '^' operator (SA4000)
 用 & 操作校验是否具备对应的能力。
 */
 
+/*
+这里 Like 为 1，Collect 为 2，Comment 为 4。转为二进制以后分别为 001, 010, 100。
+作为 2 的 n 次方，我们保证了只有一位是 1，其他都是 0。
+*/
 const (
-	Like    = 1 << iota // 1的0次方，1
+	Like    = 1 << iota // 1左移0位，1
 	Collect             // 2
 	Comment             // 4
 )

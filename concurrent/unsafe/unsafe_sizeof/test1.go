@@ -60,9 +60,9 @@ func main() {
 		// 所以对于任何类型的切片来说，Sizeof返回值都是24个字节
 	*/
 	fmt.Println(unsafe.Sizeof(make([]int32, 10, 10)))   // 24
-	fmt.Println(unsafe.Alignof(make([]int32, 10, 10)))  // 8
+	fmt.Println(unsafe.Alignof(make([]int32, 10, 10)))  // 8，因为slice struct中三个字段都是8字节
 	fmt.Println(unsafe.Sizeof(make([]Person, 10, 10)))  // 24
-	fmt.Println(unsafe.Alignof(make([]Person, 10, 10))) // 8
+	fmt.Println(unsafe.Alignof(make([]Person, 10, 10))) // 8，这与什么类型的切片无关
 	fmt.Println(unsafe.Sizeof([]int32{}))               // 24
 
 	fmt.Println("==============")
@@ -72,8 +72,8 @@ func main() {
 		d int8
 	}
 
-	fmt.Println("Alignment of array a:", unsafe.Alignof(a))              // 数组a的对齐倍数 4
-	fmt.Println("Alignment of array b:", unsafe.Alignof(b))              // 数组b的对齐倍数 2
+	fmt.Println("Alignment of array a:", unsafe.Alignof(a))              // 数组a的对齐倍数 4，因为与int32的对齐倍数一致
+	fmt.Println("Alignment of array b:", unsafe.Alignof(b))              // 数组b的对齐倍数 2，与构成数组的struct一致
 	fmt.Println("Alignment of int32:", unsafe.Alignof(a[0]))             // int32的对齐倍数 4
 	fmt.Println("Alignment of struct in array b:", unsafe.Alignof(b[0])) // 数组b中结构体的对齐倍数 2
 }

@@ -8,7 +8,7 @@ unsafe.Pointer称为通用指针，官方文档对该类型有四个重要描述
 （2）Pointer可以被转化为任何类型的指针
 （3）uintptr可以被转化为Pointer
 （4）Pointer可以被转化为uintptr
-unsafe.Pointer是特别定义的一种指针类型（译注：类似C语言中的void类型的指针），在golang中是用于各种指针相互转换的桥梁，它可以包含任意类型变量的地址。
+unsafe.Pointer是特别定义的一种指针类型，在golang中是用于各种指针相互转换的桥梁，它可以是任意类型变量的地址。
 当然，我们不可以直接通过*p来获取unsafe.Pointer指针指向的真实变量的值，因为我们并不知道变量的具体类型。
 
 
@@ -17,9 +17,9 @@ Golang指针
 unsafe.Pointer: 通用指针类型，用于转换不同类型的指针，不能进行指针运算，不能读取内存存储的值（必须转换到某一类型的普通指针）。
 uintptr: 用于指针运算，GC 不把 uintptr 当指针，uintptr 无法持有对象。uintptr 类型的目标会被回收。
 
-unsafe.Pointer 是桥梁，可以让任意类型的指针实现相互转换，也可以将任意类型的指针转换为 uintptr 进行指针运算。
+unsafe.Pointer 是桥梁，可以让任意类型的指针实现相互转换，也可以转换为 uintptr 进行指针运算。
 unsafe.Pointer 不能参与指针运算，比如你要在某个指针地址上加上一个偏移量，Pointer是不能做这个运算的，那么谁可以呢?
-就是uintptr类型了，只要将Pointer类型转换成uintptr类型，做完加减法后，转换成Pointer，通过*操作，取值，修改值，随意。
+就是uintptr类型了，只要将Pointer类型转换成uintptr类型，做完加减法后，再转换成Pointer，通过*操作，取值，修改值，随意。
 
 总结：unsafe.Pointer 可以让你的变量在不同的普通指针类型转来转去，也就是表示为任意可寻址的指针类型。而 uintptr 常用于与 unsafe.Pointer 打配合，用于做指针运算。
 
@@ -30,7 +30,23 @@ unsafe.Pointer的特别之处在于，它可以绕过Go语言类型系统的检�
 比如说，[]byte和string其实内部的存储结构都是一样的，但 Go 语言的类型系统禁止他俩互换。如果借助unsafe.Pointer，我们就可以实现在零拷贝的情况下，将[]byte数组直接转换成string类型。
 bytes := []byte{104, 101, 108, 108, 111}
 
+// []byte 的底层表示
+type slice struct {
+    array unsafe.Pointer // 元素指针，在32位机器占用4个字节，64位机器占用8个字节
+    len   int // 长度，同上
+    cap   int // 容量，同上
+}
+
+// string 的底层表示
+type stringHeader struct {
+    Data uintptr // 指向底层数组的指针
+    Len  int     // 字符串长度
+}
+
+
 p := unsafe.Pointer(&bytes) //强制转换成unsafe.Pointer，编译器不会报错
 str := *(*string)(p) //然后强制转换成string类型的指针，再将这个指针的值当做string类型取出来
 fmt.Println(str) //输出 "hello"
+对于go1.20+的版本可使用unsafe.String的方式来完成上面的工作
+
 

@@ -23,9 +23,14 @@ func main() {
 	*j = int64(763)
 	v.PutI()
 	v.PutJ()
-	fmt.Println("===============")
+	fmt.Println("===============testSlice")
 	testSlice()
-	//slice2arrayWithHack()
+	fmt.Println("===============testSliceData")
+	testSliceData()
+	fmt.Println("===============testString")
+	testString()
+	fmt.Println("===============testStringData")
+	testStringData()
 }
 
 //var i *int32 = (*int32)(unsafe.Pointer(v))
@@ -45,22 +50,75 @@ len: 切片的长度，必须是一个整数类型或者未命名的常量。
 使用切片操作符 [:] 将这个数组转换为一个切片。
 特殊情况： 如果 ptr 是 nil 并且 len 是零，Slice 函数返回 nil。这种行为在某些情况下是有用的，例如当你想要创建一个空切片而无须分配内存时。
 */
+// 从内存指针创建切片（零拷贝）
 func testSlice() {
 	a := [3]int{2, 3, 4}
-	//a := []int{3, 4, 5}
-	slice := unsafe.Slice(&a[0], 3)
+	slice := unsafe.Slice(&a[0], 2)
 	fmt.Println(slice)
-	fmt.Println(len(slice)) // 3
-	fmt.Println(cap(slice)) // 3
+	fmt.Println(len(slice)) // 2
+	fmt.Println(cap(slice)) // 2
 }
 
-func slice2arrayWithHack() {
-	var b = []int{11, 12, 13}
-	var a = *(*[3]int)(unsafe.Pointer(&b[0]))
-	a[1] += 10
-	fmt.Printf("%v\n", b) // [11 12 13]
-	fmt.Println(a)
-	fmt.Println(len(a))
-	fmt.Println(cap(a))
+/*
+unsafe.Slice(ptr, len) 和常规的切片操作 arr[:] 虽然都创建切片，但在本质、安全性、使用场景上有根本区别：
+unsafe针对原始内存指针，对于类型安全没有编译时检查，对于边界检查没有运行时检查
+*/
 
+// SliceData(slice []ArbitraryType) *ArbitraryType
+// 获取切片底层数组的指针
+func testSliceData() {
+	// 创建切片
+	s := []string{"Go", "Rust", "C++"}
+
+	// 获取底层数组指针
+	ptr := unsafe.SliceData(s)
+
+	// 通过指针访问元素
+	first := *ptr
+	second := *(*string)(unsafe.Add(unsafe.Pointer(ptr), unsafe.Sizeof("")))
+
+	fmt.Println(first, second) // Go Rust
+
+	// 修改指针影响原切片
+	*ptr = "Golang"
+	fmt.Println(s) // [Golang Rust C++]
+}
+
+// String(ptr *byte, len IntegerType) string
+// 从字节指针创建字符串（零拷贝）
+func testString() {
+	// 字节数组
+	data := []byte{'H', 'e', 'l', 'l', 'o'}
+
+	// 获取起始指针
+	ptr := unsafe.SliceData(data)
+
+	// 创建字符串（共享内存）
+	str := unsafe.String(ptr, len(data))
+
+	fmt.Println(str) // Hello
+
+	// 修改原始数据会影响字符串
+	data[0] = 'h'
+	fmt.Println(str) // hello
+}
+
+// StringData(str string) *byte
+// 获取字符串底层字节数组的指针
+func testStringData() {
+	s := "Hello, 世界"
+
+	// 获取字节指针
+	ptr := unsafe.StringData(s)
+
+	// 计算长度
+	lens := len(s)
+
+	// 重新构造切片（零拷贝）
+	bytes := unsafe.Slice(ptr, lens)
+
+	fmt.Printf("%q\n", bytes) // "Hello, 世界"
+
+	// 注意：不能直接修改（字符串不可变）
+	// *ptr = 'h' // 运行时错误：写入只读内存
 }

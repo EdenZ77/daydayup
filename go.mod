@@ -1,13 +1,12 @@
 module hello
 
-go 1.19
+go 1.21
 
 require (
 	github.com/bytedance/gopkg v0.0.0-20230728082804-614d0af6619b
 	github.com/darren/gpac v0.0.0-20210609082804-b56d6523a3af
 	github.com/fsnotify/fsnotify v1.9.0
 	github.com/golang/glog v1.0.0
-	github.com/google/uuid v1.1.2
 	github.com/google/wire v0.5.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.10.0
 	github.com/jinzhu/copier v0.3.5

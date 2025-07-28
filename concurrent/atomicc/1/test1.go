@@ -2,23 +2,55 @@ package main
 
 import (
 	"fmt"
-	"sync"
+	"sync/atomic"
+	"time"
 )
 
-// 多个goroutine 累加count，导致并发问题
-var count int
-
-func add(wg *sync.WaitGroup) {
-	defer wg.Done()
-	count++
+type Config struct {
+	APIEndpoint string
+	Timeout     time.Duration
+	MaxRetries  int
 }
 
+// 如果不适用atomic更新配置，则读取线程可能读到部分更新的值
+
 func main() {
-	wg := sync.WaitGroup{}
-	wg.Add(1000)
-	for i := 0; i < 1000; i++ {
-		go add(&wg)
+	var config atomic.Value
+
+	// 初始配置
+	initial := Config{
+		APIEndpoint: "https://api.example.com",
+		Timeout:     5 * time.Second,
+		MaxRetries:  3,
 	}
-	wg.Wait()
-	fmt.Println(count)
+	config.Store(initial)
+
+	// 模拟配置更新
+	go func() {
+		for {
+			time.Sleep(10 * time.Second)
+			newCfg := Config{
+				APIEndpoint: "https://new-api.example.com",
+				Timeout:     10 * time.Second,
+				MaxRetries:  5,
+			}
+			config.Store(newCfg)
+			fmt.Println("配置已更新")
+		}
+	}()
+
+	// 工作协程使用配置
+	for i := 0; i < 5; i++ {
+		go func(id int) {
+			for {
+				cfg := config.Load().(Config)
+				fmt.Printf("Worker %d 使用配置: %s, %v, %d\n",
+					id, cfg.APIEndpoint, cfg.Timeout, cfg.MaxRetries)
+				time.Sleep(2 * time.Second)
+			}
+		}(i)
+	}
+
+	// 保持主程序运行
+	select {}
 }

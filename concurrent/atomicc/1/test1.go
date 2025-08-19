@@ -12,7 +12,7 @@ type Config struct {
 	MaxRetries  int
 }
 
-// 如果不适用atomic更新配置，则读取线程可能读到部分更新的值
+// 如果不使用atomic更新配置，则读取线程可能读到部分更新的值
 
 func main() {
 	var config atomic.Value

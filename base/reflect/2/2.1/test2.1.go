@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	SizeofAndAlignofTest()
+	NumMethodTest()
 }
 
 func pointerTest() {
@@ -100,4 +100,44 @@ func SizeofAndAlignofTest() {
 
 	flag := reflect.TypeOf(Flag{})
 	fmt.Printf("%-15s Size:%-2d Align:%d\n", flag.Kind(), flag.Size(), flag.Align())
+}
+
+type MyStruct struct{}
+
+func (m MyStruct) MyMethod() {}
+
+func MethodTest() {
+	t := reflect.TypeOf(MyStruct{})
+	// 返回类型方法集中指定索引位置的方法（从 0 开始）
+	// i int：方法的索引位置（范围必须是 [0, NumMethod()-1]）
+	method := t.Method(0)    // 获取第一个方法
+	fmt.Println(method.Name) // 输出: MyMethod
+}
+
+type MyInterface interface {
+	InterfaceMethod()
+}
+
+func MethodByNameTest() {
+	t := reflect.TypeOf((*MyInterface)(nil)).Elem()
+	// 按名称查找方法集中的方法
+	method, found := t.MethodByName("InterfaceMethod")
+	if found {
+		fmt.Println("Signature:", method.Type)
+	}
+}
+
+type MyStruct2 struct{}
+
+func (m MyStruct2) Method1()    {}
+func (m *MyStruct2) Method2()   {}
+func (m MyStruct2) unexported() {} // 未导出方法
+
+// NumMethodTest 返回可通过 Method 方法访问的方法数量
+func NumMethodTest() {
+	tValue := reflect.TypeOf(MyStruct2{})
+	fmt.Println(tValue.NumMethod()) // 输出: 1 (只有 Method1)
+
+	tPtr := reflect.TypeOf(&MyStruct2{})
+	fmt.Println(tPtr.NumMethod()) // 输出: 2 (Method1 和 Method2)
 }

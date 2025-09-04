@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	NumMethodTest()
+	MethodByNameTest()
 }
 
 func pointerTest() {
@@ -69,8 +69,8 @@ func elemManyTest() {
 	t := reflect.TypeOf(pp) // **int
 	//t.Elem()                // *int (第一层解引用)
 	//t.Elem().Elem()         // int  (第二层解引用)
-	fmt.Printf("elem: %v\n", t.Elem())
-	fmt.Printf("elem.elem: %v\n", t.Elem().Elem())
+	fmt.Printf("elem: %v, elem kind: %v\n", t.Elem(), t.Elem().Kind())                         // elem: *int, elem kind: ptr
+	fmt.Printf("elem.elem: %v, elem.elem kind: %v\n", t.Elem().Elem(), t.Elem().Elem().Kind()) //elem.elem: int, elem.elem kind: int
 }
 
 type Args struct {
@@ -123,7 +123,7 @@ func MethodByNameTest() {
 	// 按名称查找方法集中的方法
 	method, found := t.MethodByName("InterfaceMethod")
 	if found {
-		fmt.Println("Signature:", method.Type)
+		fmt.Println("Signature:", method.Type) // Signature: func()
 	}
 }
 

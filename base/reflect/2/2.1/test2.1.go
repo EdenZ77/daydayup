@@ -55,7 +55,7 @@ func enmuTest() {
 	fmt.Println(typeOfA.Name(), typeOfA.Kind()) // Enum int
 }
 
-func elemTest() {
+func elemMapTest() {
 	m := map[string]int{}
 	t := reflect.TypeOf(m)
 	keyType := t.Key()    // string
@@ -69,8 +69,10 @@ func elemManyTest() {
 	t := reflect.TypeOf(pp) // **int
 	//t.Elem()                // *int (第一层解引用)
 	//t.Elem().Elem()         // int  (第二层解引用)
-	fmt.Printf("elem: %v, elem kind: %v\n", t.Elem(), t.Elem().Kind())                         // elem: *int, elem kind: ptr
-	fmt.Printf("elem.elem: %v, elem.elem kind: %v\n", t.Elem().Elem(), t.Elem().Elem().Kind()) //elem.elem: int, elem.elem kind: int
+	// elem: *int, elem kind: ptr
+	fmt.Printf("elem: %v, elem kind: %v\n", t.Elem(), t.Elem().Kind())
+	// elem.elem: int, elem.elem kind: int
+	fmt.Printf("elem.elem: %v, elem.elem kind: %v\n", t.Elem().Elem(), t.Elem().Elem().Kind())
 }
 
 type Args struct {

@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	mapTest()
+	methodCallTest()
 }
 
 func baseTypeTest() {
@@ -21,8 +21,8 @@ func baseTypeTest() {
 	a := 42
 	va := reflect.ValueOf(a)
 	fmt.Println("CanSet:", va.CanSet()) // false
-	va.SetInt(100)
-	fmt.Println(a) // 100
+	// panic: reflect: reflect.Value.SetInt using unaddressable value
+	//va.SetInt(100)
 
 	// 字符串
 	s := "hello"
@@ -105,6 +105,8 @@ func sliceTest() {
 
 	// 追加元素
 	newSlice := reflect.Append(v, reflect.ValueOf(4))
+	// 如果使用 v := reflect.ValueOf(slice) 则将导致下面的panic
+	// panic: reflect: reflect.Value.Set using unaddressable value
 	v.Set(newSlice)
 	fmt.Println(slice) // [1 2 3 4]
 
@@ -128,4 +130,44 @@ func mapTest() {
 	// 删除键
 	v.SetMapIndex(key, reflect.Value{})
 	fmt.Println(m) // map[a:1 b:2]
+}
+
+func Add(a, b int) int {
+	return a + b
+}
+
+func funcCallTest() {
+	// 获取函数值
+	funcValue := reflect.ValueOf(Add)
+
+	// 准备参数
+	args := []reflect.Value{
+		reflect.ValueOf(3),
+		reflect.ValueOf(4),
+	}
+
+	// 调用函数
+	results := funcValue.Call(args)
+	fmt.Println(results[0].Int()) // 7
+}
+
+type Calculator struct{}
+
+func (c Calculator) Multiply(x, y int) int {
+	return x * y
+}
+
+func methodCallTest() {
+	calc := Calculator{}
+	v := reflect.ValueOf(calc)
+
+	// 获取方法
+	method := v.MethodByName("Multiply")
+
+	// 调用方法
+	result := method.Call([]reflect.Value{
+		reflect.ValueOf(5),
+		reflect.ValueOf(6),
+	})
+	fmt.Println(result[0].Int()) // 30
 }

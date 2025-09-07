@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	pointerChain()
+	processInterfaceTest()
 }
 
 func interfaceTest() {
@@ -49,7 +49,7 @@ func pointerChain() {
 	v1 := v.Elem()                    // *int
 	fmt.Printf("v1: %v\n", v1.Kind()) // v1: ptr
 	v2 := v1.Elem()                   // int
-	fmt.Printf("v2: %v\n", v1.Kind()) // v2: ptr
+	fmt.Printf("v2: %v\n", v2.Kind()) // v2: int
 	fmt.Println(v2.Int())             // 42
 }
 
@@ -62,11 +62,11 @@ func processInterface(i interface{}) {
 	}
 
 	elem := v.Elem()
-	fmt.Printf("接口包含: 类型=%v, 值=%v\n", elem.Kind(), elem.Interface())
+	fmt.Printf("接口底层的类型=%v, 值=%v\n", elem.Kind(), elem.Interface())
 }
 
 func processInterfaceTest() {
-	processInterface(42)         // 接口包含: 类型=int, 值=42
-	processInterface("hello")    // 接口包含: 类型=string, 值=hello
-	processInterface(struct{}{}) // 接口包含: 类型=struct, 值={}
+	processInterface(42)         // 接口底层的类型=int, 值=42
+	processInterface("hello")    // 接口底层的类型=string, 值=hello
+	processInterface(struct{}{}) // 接口底层的类型=struct, 值={}
 }

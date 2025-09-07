@@ -2,12 +2,14 @@ package main
 
 import (
 	"fmt"
+	"hello/base/reflect/2/2.1/pkgpath"
 	"reflect"
+	"strings"
 	"unsafe"
 )
 
 func main() {
-	MethodByNameTest()
+	fieldByNameTest()
 }
 
 func pointerTest() {
@@ -142,4 +144,106 @@ func NumMethodTest() {
 
 	tPtr := reflect.TypeOf(&MyStruct2{})
 	fmt.Println(tPtr.NumMethod()) // 输出: 2 (Method1 和 Method2)
+}
+
+func pkgPathTest() {
+	// 返回该类型声明所在包的导入路径
+	pkgPath := reflect.TypeOf(mypkgpath.MyType(0)).PkgPath()
+	// hello/base/reflect/2/2.1/pkgpath
+	fmt.Println(pkgPath)
+}
+
+type User struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+}
+
+func fieldTest() {
+	t := reflect.TypeOf(User{})
+
+	// 获取第一个字段
+	idField := t.Field(0)
+	fmt.Println("Field 0:", idField.Name) // 输出: ID
+
+	// 获取字段标签
+	jsonTag := idField.Tag.Get("json")
+	fmt.Println("JSON Tag:", jsonTag) // 输出: id
+}
+
+type Address struct {
+	City string
+}
+
+type User1 struct {
+	Name    string
+	Address // 嵌入结构体
+}
+
+// 作用：通过索引路径获取嵌套字段
+// 参数：索引切片（表示字段的嵌套路径）
+// 返回值：嵌套字段的 StructField 信息
+// 等效于连续调用 Field()方法，用于访问嵌入结构体中的字段
+
+func fieldByIndexTest() {
+	t := reflect.TypeOf(User1{})
+
+	// 获取嵌入的 City 字段
+	cityField := t.FieldByIndex([]int{1, 0})
+	fmt.Println("Nested Field:", cityField.Name) // 输出: City
+}
+
+type User2 struct {
+	ID   int
+	Name string
+}
+
+/*
+作用：通过字段名查找字段
+参数：字段名称（区分大小写）
+返回值：
+1.找到的字段信息
+2.是否找到的布尔值
+*/
+func fieldByNameTest() {
+	t := reflect.TypeOf(User2{})
+
+	// 查找存在的字段
+	_, found := t.FieldByName("Name")
+	fmt.Println("Found Name?", found) // true
+
+	// 查找不存在的字段
+	_, found = t.FieldByName("Age")
+	fmt.Println("Found Age?", found) // false
+}
+
+type Contact struct {
+	Email string
+}
+
+type User3 struct {
+	Name    string
+	Contact // 嵌入结构体
+}
+
+/*
+作用：使用自定义匹配函数查找字段
+参数：字段名匹配函数
+返回值：
+1.第一个匹配的字段信息
+2.是否找到的布尔值
+
+使用自定义逻辑匹配字段名
+在多个匹配字段冲突时返回 false
+*/
+func fieldByNameFuncTest() {
+	t := reflect.TypeOf(User3{})
+
+	// 查找包含 "mail" 的字段
+	field, found := t.FieldByNameFunc(func(s string) bool {
+		return strings.Contains(strings.ToLower(s), "mail")
+	})
+
+	if found {
+		fmt.Println("Found field:", field.Name) // 输出: Email
+	}
 }

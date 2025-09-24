@@ -14,25 +14,12 @@ import (
 func main() {
 	rand.Seed(time.Now().UnixNano())
 	fmt.Println("===== Go context.WithDeadline 深入解析 =====")
-	fmt.Println("按回车键继续...")
-	fmt.Scanln()
 
-	demoBasicDeadline()
-
-	fmt.Println("\n按回车键继续...")
-	fmt.Scanln()
-	demoAdvancedFeatures()
-
-	fmt.Println("\n按回车键继续...")
-	fmt.Scanln()
+	//demoBasicDeadline()
+	//demoAdvancedFeatures()
 	demoHttpClientTimeout()
+	//demoTaskScheduler()
 
-	fmt.Println("\n按回车键继续...")
-	fmt.Scanln()
-	demoTaskScheduler()
-
-	fmt.Println("\n按回车键退出程序...")
-	fmt.Scanln()
 }
 
 // ====== 基本使用演示 ======

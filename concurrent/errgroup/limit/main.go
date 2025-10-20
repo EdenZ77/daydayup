@@ -11,7 +11,7 @@ func main() {
 	g, _ := errgroup.WithContext(context.Background())
 	g.SetLimit(2) // 最大并发数为2
 
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 500; i++ {
 		i := i // 闭包捕获
 		g.Go(func() error {
 			fmt.Printf("Task %d started\n", i)

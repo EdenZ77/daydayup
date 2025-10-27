@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	fieldByNameTest()
+	MethodByNameTest()
 }
 
 func pointerTest() {
@@ -119,7 +119,7 @@ func MethodTest() {
 }
 
 type MyInterface interface {
-	InterfaceMethod()
+	InterfaceMethod(int, string)
 }
 
 func MethodByNameTest() {
@@ -127,7 +127,7 @@ func MethodByNameTest() {
 	// 按名称查找方法集中的方法
 	method, found := t.MethodByName("InterfaceMethod")
 	if found {
-		fmt.Println("Signature:", method.Type) // Signature: func()
+		fmt.Println("Signature:", method.Type) // Signature: func(int, string)
 	}
 }
 

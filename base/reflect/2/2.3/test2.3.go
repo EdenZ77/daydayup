@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	methodCallTest()
+	structTest()
 }
 
 func baseTypeTest() {
@@ -86,6 +86,7 @@ type Person struct {
 func structTest() {
 	p := Person{"Alice", 30}
 	v := reflect.ValueOf(&p).Elem()
+	fmt.Printf("kind: %v\n", v.Kind()) // kind: struct
 
 	// 获取字段值
 	nameField := v.FieldByName("Name")
